@@ -1,18 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import reportWebVitals from './reportWebVitals';
+
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/js/bootstrap.bundle"
+
 import App from './App';
-import reportWebVitals from './reportWebVitals';
-import Trial from './components/Trial';
-import Member from './pages/Member';
-import Paket from './pages/Paket';
-import Users from './pages/Users'
 
 ReactDOM.render(
   <React.StrictMode>
-    <Member />
+    <App />
   </React.StrictMode>,
   document.getElementById('root')
 );

@@ -1,24 +1,25 @@
 import { Modal } from "bootstrap";
 import React from "react";
+import axios from "axios";
 
-class Users extends React.Component{
-    constructor(){
+class Users extends React.Component {
+    constructor() {
         super()
         this.state = {
             User: [
                 {
-                    id_user: "01", nama: "heesung", username: "hee-en", 
-                    password: "1234", role: "admin"
+                    id_user: "01", nama: "heesung", username: "hee-en",
+                    password: "1234", role: "Admin"
                 },
 
                 {
-                    id_user: "02", nama: "leyli", username: "leyy", 
-                    password: "4321", role: "admin"
+                    id_user: "02", nama: "leyli", username: "leyy",
+                    password: "4321", role: "Admin"
                 },
 
                 {
-                    id_user: "03", nama: "fell", username: "feel", 
-                    password: "7894", role: "admin"
+                    id_user: "03", nama: "fell", username: "feel",
+                    password: "7894", role: "Admin"
                 },
 
             ],
@@ -31,7 +32,7 @@ class Users extends React.Component{
             action: ""
         }
     }
-    
+
     tambahUser() {
         // memunculkan modal
         this.modalUsers = new Modal(document.getElementById("modal-users"))
@@ -42,8 +43,8 @@ class Users extends React.Component{
             nama: "",
             username: "",
             password: "",
-            role: "admin",
-            actioan: "tambah"
+            role: "",
+            action: "tambah"
         })
     }
 
@@ -55,8 +56,31 @@ class Users extends React.Component{
         this.modalUsers.hide()
 
         //cek aksi tambah atau ubah
-        if(this.state.action === "tambah") {
+        if (this.state.action === "tambah") {
+            let endpoint = "http://localhost:8000/users/"
             // menampung data dari pengguna
+            let newUser = {
+                nama: this.state.nama,
+                username: this.state.username,
+                password: this.state.password,
+                role: this.state.role
+            }
+
+            axios.post(endpoint, newUser)
+                .then(response => {
+                    window.alert(response.data.message)
+                    this.getData()
+                })
+                .catch(error => console.log(error))
+
+            // let temp = this.state.user
+            // temp.push(newUser)
+
+            // this.setState({user: temp})
+
+        } else if (this.state.action === "ubah") {
+            let endpoint = "http://localhost:8000/users/" + this.state.id_user
+
             let newUser = {
                 id_user: this.state.id_user,
                 nama: this.state.nama,
@@ -65,18 +89,86 @@ class Users extends React.Component{
                 role: this.state.role
             }
 
-            let temp = this.state.user
-            temp.push(newUser)
+            axios.put(endpoint, newUser)
+                .then(response => {
+                    window.alert(response.data.message)
+                    this.getData()
+                })
+                .catch(error => console.log(error))
 
-            this.setState({user: temp})
+            // let temp = this.state.user
+            // let index = temp.findIndex(
+            //     user => user.id_user === this.state.id_user
+            // )
 
-        }else if(this.state.action === "ubah") {
+            // temp[index].nama = this.state.nama
+            // temp[index].username = this.state.username
+            // temp[index].password = this.state.password
+            // temp[index].role = this.state.role
 
+            // this.setState({ user: temp })
+
+            this.modalUsers.hide()
         }
     }
 
+    ubahUser(id_user) {
+        this.modalUsers = new Modal(document.getElementById("modal-users")) // this "modal-member"
+        this.modalUsers.show() //Menampilkan modal USER
+
+        //mencari index posisi dari data USER yg akan diubah
+        let index = this.state.User.findIndex(
+            user => user.id_user === id_user
+        )
+
+        this.setState({
+            action: "ubah",
+            id_user: this.state.User[index].id_user,
+            nama: this.state.User[index].nama,
+            username: this.state.User[index].username,
+            password: this.state.password,
+            role: this.state.User[index].role
+        })
+    }
+
+    hapusUser(id_user) {
+        if (window.confirm('Apakah anda yakin ingin menghapus data ini?')) {
+            let endpoint = "http://localhost:8000/users/" + id_user
+
+            axios.delete(endpoint)
+                .then(response => {
+                    window.alert(response.data.message)
+                    this.getData()
+                })
+                .catch(error => console.log(error))
+            // let temp = this.state.User
+            // let index = temp.findIndex(
+            //     user => user.id_user === id_user
+            // )
+
+            // // menghapus data pada array
+            // temp.splice(index, 1)
+
+            // this.setState({ user: temp })
+        }
+    }
+
+    getData() {
+        let endpoint = "http://localhost:8000/users"
+        axios.get(endpoint)
+            .then(response => {
+                this.setState({ User: response.data })
+            })
+            .catch(error => console.log(error))
+    }
+
+    componentDidMount() {
+        // fungsi ini di jalankan setelah fungsi render berjalan
+        this.getData()
+    }
+
     render() {
-        return(
+        return (
             <div className="card">
                 <div className="card-header bg-primary">
                     <h4 className="text-white">
@@ -85,41 +177,51 @@ class Users extends React.Component{
                 </div>
 
                 <div className="card-body">
+
+                    <button className="col-lg-2 btn-primary"
+                        onClick={() => this.tambahUser()}>
+                        Tambah Data
+                    </button> <br/>
                     <ul className="list-group">
                         {this.state.User.map(userr => (
                             <li className="list-group-item">
                                 <div className="row">
 
                                     {/** BAGIAN NAMA */}
-                                    <div className="col-lg-4">
-                                        <small className="text-info">Nama</small> <br/>
+                                    <div className="col-lg-3">
+                                        <small className="text-info">Nama</small> <br />
                                         {userr.nama}
                                     </div>
 
                                     {/** USERNAME */}
-                                    <div className="col-lg-4">
-                                        <small className="text-info">Username</small> <br/>
+                                    <div className="col-lg-3">
+                                        <small className="text-info">Username</small> <br />
                                         {userr.username}
                                     </div>
 
                                     {/** ROLE */}
-                                    <div className="col-lg-4">
-                                        <small className="text-info">Role</small> <br/>
+                                    <div className="col-lg-3">
+                                        <small className="text-info">Role</small> <br />
                                         {userr.role}
                                     </div>
 
+                                    <button small className='btn btn-sm col-sm-1 btn-success mx-1'
+                                        onClick={() => this.ubahUser(userr.id_user)}>
+                                        Edit
+                                    </button>
+
+                                    <button className='btn btn-sm col-sm-1 btn-danger mx-1'
+                                        onClick={() => this.hapusUser(userr.id_user)}>
+                                        Delete
+                                    </button>
+
                                 </div>
                             </li>
-                        ))} <br/>
+                        ))} <br />
                     </ul>
 
-                    <button className="col-lg-2 btn-primary"
-                    onClick={() => this.tambahUser()}>
-                        Tambah Data
-                    </button>
-
                     {/** FORM MODAL USER */}
-                    <div className="modal" id="modal-member">
+                    <div className="modal" id="modal-users">
                         <div className="modal-dialog modal-md">
                             <div className="modal-content">
                                 <div className="modal-header bg-success">
@@ -130,33 +232,34 @@ class Users extends React.Component{
 
                                 <div className="modal-body">
                                     <form onSubmit={ev => this.simpanUser(ev)}>
-                                        Nama 
+                                        Nama
                                         <input type="text" className="form-control mb-2"
-                                        value={this.state.nama}
-                                        onChange={ev => this.setState({ nama: ev.target.value})}
-                                        required
+                                            value={this.state.nama}
+                                            onChange={ev => this.setState({ nama: ev.target.value })}
+                                            required
                                         />
 
-                                        Username 
+                                        Username
                                         <input type="text" className="form-control mb-2"
-                                        value={this.state.username}
-                                        onChange={ev => this.setState({ username: ev.target.value})}
-                                        required
+                                            value={this.state.username}
+                                            onChange={ev => this.setState({ username: ev.target.value })}
+                                            required
                                         />
 
-                                        Password 
-                                        <input type="text" className="form-control mb-2"
-                                        value={this.state.password}
-                                        onChange={ev => this.setState({ password: ev.target.value})}
-                                        required
+                                        Password
+                                        <input type="password" className="form-control mb-2"
+                                            value={this.state.password}
+                                            onChange={ev => this.setState({ password: ev.target.value })}
+                                            required
                                         />
 
-                                        Role 
+                                        Role
                                         <select className="form-control mb2"
                                             value={this.state.role}
                                             onChange={ev => this.setState({ role: ev.target.value })}>
-                                            <option value="admin">Admin</option>
+                                            <option value="Admin">Admin</option>
                                             <option value="Member">Member</option>
+                                            <option value="Kasir">Kasir</option>
                                         </select>
 
                                         <button className="btn btn-success btn-sm" type="submit">
@@ -172,7 +275,5 @@ class Users extends React.Component{
         )
     }
 }
-
-// PEN PULANG SOHQEOIHEWOIFJ
 
 export default Users

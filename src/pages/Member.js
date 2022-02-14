@@ -1,7 +1,8 @@
 import React from "react";
-import $ from "jquery";
-import axios from "axios";
 import { Modal } from "bootstrap"
+import axios from "axios"
+import { data } from "jquery";
+import {baseUrl} from "../Config"
 
 class Member extends React.Component {
     constructor() {
@@ -9,40 +10,37 @@ class Member extends React.Component {
         this.state = {
             members: [
                 {
-                    id_member: "111", nama: "Edo",
+                    id_member: "01", nama: "Kim Zulkidin",
                     alamat: "Jalan Gunung Semeru 13 Malang",
                     jenis_kelamin: "Pria", telepon: "01234567"
                 },
 
                 {
-                    id_member: "112", nama: "Sifa",
+                    id_member: "02", nama: "Lee Felix Navidad",
                     alamat: "Jalan Semeru kanan 28 Surabaya",
-                    jenis_kelamin: "Wanita", telepon: "00123456"
+                    jenis_kelamin: "Pria", telepon: "00123456"
                 },
 
                 {
-                    id_member: "113", nama: "Suho",
+                    id_member: "03", nama: "Suholangkaya",
                     alamat: "Jalan Bromo 54 Malang",
                     jenis_kelamin: "Pria", telepon: "89456123"
                 },
             ],
-
             id_member: "",
             nama: "",
             alamat: "",
             telepon: "",
             jenis_kelamin: "",
             action: "", //untuk menyimpan aksi dari tambah atau ubah data
-
         }
     }
 
     tambahData() {
-        // memunculkan modal
-        this.modalMember = new Modal(document.getElementById("modal-member"))
+        // Menampilkan modal member
+        this.modalMember = new Modal(document.getElementById("modal-member")) // this "modal-member"
         this.modalMember.show()
-
-        // mengosongkan inputannya
+        // Reset state untuk form member
         this.setState({
             nama: "",
             alamat: "",
@@ -61,36 +59,118 @@ class Member extends React.Component {
         this.modalMember.hide()
 
         //cek aksi tambah atau ubah
-        if(this.state.action === "tambah") {
+        if (this.state.action === "tambah") {
+            let endpoint = "http://localhost:8000/member"
             // menampung data dari pengguna
             let newMember = {
-                id_member: this.state.id.member,
+                id_member: this.state.id_member,
                 nama: this.state.nama,
                 alamat: this.state.alamat,
                 telepon: this.state.telepon,
                 jenis_kelamin: this.state.jenis_kelamin
             }
 
-            let temp = this.state.members
-            temp.push(newMember)
+            //tambahkan ke state members(array)
+            // let temp = this.state.members
+            //menambahkan data dalam array
+            // temp.push(newMember)
+            // this.setState({ members: temp })
 
-            this.setState({members: temp})
+            axios.post(endpoint, newMember)
+                .then(response => {
+                    window.alert(response.data.message)
+                    this.getData()
+                })
+                .catch(error => console.log(error))
 
-        }else if(this.state.action === "ubah") {
+        }else if(this.state.action === "ubah"){
+            // let temp = this.state.members
+            // let index = temp.findIndex(
+            //     member => member.id_member === this.state.id_member
+            // )
 
+            // temp[index].nama = this.state.nama
+            // temp[index].alamat = this.state.alamat
+            // temp[index].telepon = this.state.telepon
+            // temp[index].jenis_kelamin = this.state.jenis_kelamin
+
+            // this.setState({ members: temp })
+            let newMember = {
+                id_member: this.state.id_member,
+                nama: this.state.nama,
+                alamat: this.state.alamat,
+                telepon: this.state.telepon,
+                jenis_kelamin: this.state.jenis_kelamin
+            }
+            
+            let endpoint = "http://localhost:8000/member/" + this.state.id_member
+
+            axios.put(endpoint, newMember)
+            .then(response => {
+                window.alert(response.data.message)
+                this.getData()
+            })
+            .catch(error => console.log(error))
+
+            this.modalMember.hide()
         }
     }
 
-    Edit = selectedItem => {
-        $("modal_member").modal("show")
+    ubahData(id_member) {
+        this.modalMember = new Modal(document.getElementById("modal-member")) // this "modal-member"
+        this.modalMember.show() //Menampilkan modal member
+
+        //mencari index posisi dari data member yg akan diubah
+        let index = this.state.members.findIndex(
+            member => member.id_member === id_member
+        )
+
         this.setState({
-            action: "update",
-            id_member: selectedItem.id_member,
-            nama: selectedItem.nama,
-            alamat: selectedItem.alamat,
-            jenis_kelamin: selectedItem.jenis_kelamin,
-            telepon: selectedItem.telepon
+            action: "ubah",
+            id_member: this.state.members[index].id_member,
+            nama: this.state.members[index].nama,
+            alamat: this.state.members[index].alamat,
+            jenis_kelamin: this.state.members[index].jenis_kelamin,
+            telepon: this.state.members[index].telepon
         })
+    }
+
+    hapusData(id_member) {
+        if (window.confirm('Apakah anda yakin ingin menghapus data ini?')) {
+            // let temp = this.state.members
+            // let index = temp.findIndex(
+            //     member => member.id_member === id_member
+            // )
+
+            // // menghapus data pada array
+            // temp.splice(index, 1)
+
+            // this.setState({ members: temp })
+
+            let endpoint = "http://localhost:8000/member/" + id_member
+            // menampung data dari pengguna
+
+            axios.delete(endpoint)
+                .then(response => {
+                    window.alert(response.data.message)
+                    this.getData()
+                })
+                .catch(error => console.log(error))
+        }
+    }
+
+    getData() {
+        let endpoint = `${baseUrl}/member`
+        axios.get(endpoint)
+            .then(response => {
+                this.setState({ members: response.data })
+            })
+            .catch(error => console.log(error))
+    }
+
+    componentDidMount() {
+        // fungsi ini di jalankan setelah fungsi render berjalan
+        this.getData()
     }
 
     render() {
@@ -103,6 +183,12 @@ class Member extends React.Component {
                 </div>
 
                 <div className="card-body">
+
+                    <button className="col-lg-2 btn-primary"
+                        onClick={() => this.tambahData()}>
+                        Tambah Data
+                    </button>
+
                     <ul className="list-group">
                         {this.state.members.map(member => (
                             <li className="list-group-item">
@@ -110,22 +196,32 @@ class Member extends React.Component {
                                 <div className="row">
                                     {/* clasname : row, berguna untuk menyusun data ke samping, karena defaultnya ke bawah*/}
                                     {/* BAGIAN NAMA*/}
-                                    <div className="col-lg-5">
+                                    <div className="col-lg-4">
                                         <small className="text-info">Nama</small> <br />
                                         {member.nama}
                                     </div>
 
                                     {/* BAGIAN GENDER*/}
-                                    <div className="col-lg-3">
+                                    <div className="col-lg-2">
                                         <small className="text-info">Gender</small> <br />
                                         {member.jenis_kelamin}
                                     </div>
 
                                     {/* BAGIAN TELEPON*/}
-                                    <div className="col-lg-4">
+                                    <div className="col-lg-3">
                                         <small className="text-info">Telepon</small> <br />
                                         {member.telepon}
                                     </div>
+
+                                    <button small className='btn btn-sm col-sm-1 btn-success mx-1'
+                                        onClick={() => this.ubahData(member.id_member)}>
+                                        Edit
+                                    </button>
+
+                                    <button className='btn btn-sm col-sm-1 btn-danger mx-1'
+                                        onClick={() => this.hapusData(member.id_member)}>
+                                        Delete
+                                    </button>
 
                                     {/* BAGIAN ALAMAT*/}
                                     <div className="col-lg-12">
@@ -133,30 +229,13 @@ class Member extends React.Component {
                                         {member.alamat}
                                     </div>
 
-                                    <button className="col-lg-1 mx-1 btn-success"
-                                        onClick={() => this.Edit(member)}>
-                                        Edit
-                                    </button>
-
-
-                                    <button className="col-lg-1 mx-1 btn-danger"
-                                        onClick={() => this.dropMember(member)}>
-                                        Delete
-                                    </button>
-
                                 </div>
                             </li>
-                        ))} <br />
-
+                        ))}
                     </ul>
 
-                    <button className="col-lg-2 btn-primary"
-                        onClick={() => this.tambahData()}>
-                        Tambah Data
-                    </button>
-
                     {/** Form Modal Member */}
-                    <div className="modal" id="modal-member" >
+                    <div className="modal" id="modal-member" > {/** AND THIS "modal-member" harus sama seyeng */}
                         <div className="modal-dialog modal-md">
                             <div className="modal-content">
                                 <div className="modal-header bg-success">
@@ -197,14 +276,13 @@ class Member extends React.Component {
                                         </select>
 
                                         <button className="btn btn-success btn-sm" type="submit">
-                                            Simpan
+                                            Save
                                         </button>
                                     </form>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         )

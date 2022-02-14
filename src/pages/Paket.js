@@ -1,5 +1,7 @@
 import React from "react";
-import { Modal } from "bootstrap"
+import { Modal } from "bootstrap";
+import axios from "axios";
+import { end } from "@popperjs/core";
 
 class Paket extends React.Component {
     constructor() {
@@ -17,8 +19,129 @@ class Paket extends React.Component {
                 {
                     jenis_paket: "Selimut", harga: "25000"
                 },
-            ]
+            ],
+            id_paket: "",
+            jenis_paket: "",
+            harga: "",
+            action: ""
         }
+    }
+
+    tambahPaket() {
+        this.modalPaket = new Modal(document.getElementById('modal-paket'))
+        this.modalPaket.show()
+
+        this.setState({
+            jenis_paket: "",
+            harga: "",
+            action: "tambah"
+        })
+    }
+
+    simpanPaket(event) {
+        event.preventDefault()
+
+        this.modalPaket.hide()
+
+        if (this.state.action === "tambah") {
+            let endpoint = "http://localhost:8000/paket/" //kudu pake slash belakang
+            let newPaket = {
+                jenis_paket: this.state.jenis_paket,
+                harga: this.state.harga
+            }
+
+            axios.post(endpoint, newPaket)
+                .then(response => {
+                    window.alert(response.data.message)
+                    this.getData()
+                })
+                .catch(error => console.log(error))
+
+            // let temp = this.state.pakets
+
+            // temp.push(newPaket)
+            // this.setState({ pakets: temp })
+        } else if (this.state.action === "ubah") {
+            let endpoint = "http://localhost:8000/paket/" + this.state.id_paket
+            let newPaket = {
+                jenis_paket: this.state.jenis_paket,
+                harga: this.state.harga
+            }
+
+            axios.put(endpoint, newPaket)
+                .then(response => {
+                    window.alert(response.data.message)
+                    this.getData()
+                })
+                .catch(error => console.log(error))
+
+            // let temp = this.state.pakets
+            // let index = temp.findIndex(
+            //     paket => paket.id_paket === this.state.id_paket
+            // )
+
+            // temp[index].jenis_paket = this.state.jenis_paket
+            // temp[index].harga = this.state.harga
+
+            // this.setState({ pakets: temp })
+
+            this.modalPaket.hide()
+        }
+    }
+
+    ubahPaket(id_paket) {
+        this.modalPaket = new Modal(document.getElementById("modal-paket")) // this "modal-member"
+        this.modalPaket.show() //Menampilkan modal member
+
+        //mencari index posisi dari data member yg akan diubah
+        let index = this.state.pakets.findIndex(
+            paket => paket.id_paket === id_paket
+        )
+
+        this.setState({
+            action: "ubah",
+            id_paket: this.state.pakets[index].id_paket,
+            jenis_paket: this.state.pakets[index].jenis_paket,
+            harga: this.state.pakets[index].harga,
+        })
+    }
+
+    hapusPaket(id_paket) {
+        if (window.confirm('Apakah anda yakin ingin menghapus data ini ?')) {
+
+            let endpoint = "http://localhost:8000/paket/" + id_paket
+
+            axios.delete(endpoint)
+                .then(response => {
+                    window.alert(response.data.message)
+                    this.getData()
+                })
+                .catch(error => console.log(error))
+
+            // let temp = this.state.pakets
+            // let index = temp.findIndex(
+            //     paket => paket.id_paket === id_paket  
+            // )
+
+            // // menghapus data array
+            // temp.splice(index, 1)
+
+            // this.setState({pakets: temp})
+        }
+    }
+
+    getData() {
+        let endpoint = "http://localhost:8000/paket"
+        axios.get(endpoint)
+            .then(response => {
+                this.setState({ pakets: response.data })
+            })
+            .catch(error => console.log(error))
+    }
+
+    componentDidMount() {
+        // fungsi ini di jalankan setelah fungsi render berjalan
+        this.getData()
     }
 
     render() {
@@ -31,6 +154,12 @@ class Paket extends React.Component {
                 </div>
 
                 <div className="card-body">
+                    
+                    <button className="col-lg-2 btn-primary"
+                        onClick={() => this.tambahPaket()}>
+                        Tambah Data
+                    </button>
+
                     <ul className="list-group">
                         {this.state.pakets.map(paket => (
                             <li className="list-group-item">
@@ -49,13 +178,13 @@ class Paket extends React.Component {
                                     </div>
 
                                     {/**BUTTON */}
-                                    <button className="col-lg-1 mx-1 btn-success"
-                                        onClick={() => this.Edit(paket)}>
+                                    <button className="btn btn-sm col-sm-1 btn-success mx-1"
+                                        onClick={() => this.ubahPaket(paket.id_paket)}>
                                         Edit
                                     </button>
 
-                                    <button className="col-lg-1 mx-1 btn-danger"
-                                        onClick={() => this.dropPaket(paket)}>
+                                    <button className="btn btn-sm col-sm-1 btn-danger mx-1"
+                                        onClick={() => this.hapusPaket(paket.id_paket)}>
                                         Delete
                                     </button>
                                 </div>
@@ -64,10 +193,6 @@ class Paket extends React.Component {
 
 
                     </ul>
-                    <button className="col-lg-2 btn-primary"
-                        onClick={() => this.tambahPaket()}>
-                        Tambah Data
-                    </button>
 
                     {/** FORM MODAL PAKET */}
                     <div className="modal" id="modal-paket">
@@ -83,7 +208,21 @@ class Paket extends React.Component {
                                     <form onSubmit={ev => this.simpanPaket(ev)}>
                                         Jenis Paket
                                         <input type="text" className="form-control mb-2"
-                                        value={this.state.pakets}/>
+                                            value={this.state.jenis_paket}
+                                            onChange={ev => this.setState({ jenis_paket: ev.target.value })}
+                                            required
+                                        />
+
+                                        Harga
+                                        <input type='text' className="form-control mb-2"
+                                            value={this.state.harga}
+                                            onChange={ev => this.setState({ harga: ev.target.value })}
+                                            required
+                                        />
+
+                                        <button className="btn btn-success btn-sm" type="submit">
+                                            Save
+                                        </button>
                                     </form>
                                 </div>
                             </div>
