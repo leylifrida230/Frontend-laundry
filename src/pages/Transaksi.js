@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import { baseUrl } from "../Config";
 
 export default class Transaksi extends React.Component {
     constructor() {
@@ -10,7 +11,7 @@ export default class Transaksi extends React.Component {
     }
 
     getData() {
-        let endpoint = "http://localhost:8000/transaksi/"
+        let endpoint = `${baseUrl}/transaksi/`
 
         axios.get(endpoint)
             .then(response => {
@@ -36,7 +37,7 @@ export default class Transaksi extends React.Component {
 
             // this.setState({ transaksi: temp })
 
-            let endpoint = "http://localhost:8000/transaksi/" + id_paket
+            let endpoint = `${baseUrl}/transaksi/` + id_paket
 
             axios.delete(endpoint)
             .then(response => {

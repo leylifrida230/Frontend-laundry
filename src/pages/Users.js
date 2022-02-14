@@ -1,6 +1,7 @@
 import { Modal } from "bootstrap";
 import React from "react";
 import axios from "axios";
+import { baseUrl} from "../Config"
 
 class Users extends React.Component {
     constructor() {
@@ -57,7 +58,7 @@ class Users extends React.Component {
 
         //cek aksi tambah atau ubah
         if (this.state.action === "tambah") {
-            let endpoint = "http://localhost:8000/users/"
+            let endpoint = `${baseUrl}/users/`
             // menampung data dari pengguna
             let newUser = {
                 nama: this.state.nama,
@@ -79,7 +80,7 @@ class Users extends React.Component {
             // this.setState({user: temp})
 
         } else if (this.state.action === "ubah") {
-            let endpoint = "http://localhost:8000/users/" + this.state.id_user
+            let endpoint = `${baseUrl}/users/` + this.state.id_user
 
             let newUser = {
                 id_user: this.state.id_user,
@@ -133,7 +134,7 @@ class Users extends React.Component {
 
     hapusUser(id_user) {
         if (window.confirm('Apakah anda yakin ingin menghapus data ini?')) {
-            let endpoint = "http://localhost:8000/users/" + id_user
+            let endpoint = `${baseUrl}/users/` + id_user
 
             axios.delete(endpoint)
                 .then(response => {
@@ -154,7 +155,7 @@ class Users extends React.Component {
     }
 
     getData() {
-        let endpoint = "http://localhost:8000/users"
+        let endpoint = `${baseUrl}/users/`
         axios.get(endpoint)
             .then(response => {
                 this.setState({ User: response.data })
@@ -181,7 +182,7 @@ class Users extends React.Component {
                     <button className="col-lg-2 btn-primary"
                         onClick={() => this.tambahUser()}>
                         Tambah Data
-                    </button> <br/>
+                    </button> <br />
                     <ul className="list-group">
                         {this.state.User.map(userr => (
                             <li className="list-group-item">

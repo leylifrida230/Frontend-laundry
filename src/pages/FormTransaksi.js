@@ -1,6 +1,7 @@
 import axios from "axios";
 import React from "react";
 import { Modal } from "bootstrap"
+import { baseUrl } from "../Config";
 
 export default class FormTransaksi extends React.Component {
     constructor() {
@@ -23,7 +24,7 @@ export default class FormTransaksi extends React.Component {
     }
 
     getMember() {
-        let endpoint = "http://localhost:8000/member/"
+        let endpoint = `${baseUrl}/member/`
         axios.get(endpoint)
             .then(response => {
                 this.setState({ members: response.data })
@@ -32,7 +33,7 @@ export default class FormTransaksi extends React.Component {
     }
 
     getPaket() {
-        let endpoint = "http://localhost:8000/paket/"
+        let endpoint = `${baseUrl}/paket/`
         axios.get(endpoint)
             .then(response => {
                 this.setState({ pakets: response.data })
@@ -85,7 +86,7 @@ export default class FormTransaksi extends React.Component {
 
     hapusPaket(id_paket){
         if (window.confirm("apakah anda yakin akan menghapus data ini?")) {
-            let endpoint = "http://localhost:8000/paket/" + id_paket
+            let endpoint = `${baseUrl}/paket/` + id_paket
             axios.delete(endpoint)
             .then(response => {
                 window.alert(response.data.message)
@@ -97,7 +98,7 @@ export default class FormTransaksi extends React.Component {
 
     // iki tadi awale seng "users users" awale "user" tapi tak ganti "users"
     SimpanTransaksi(){
-        let endpoint = "http://localhost:8000/transaksi/"
+        let endpoint = `${baseUrl}/transaksi/`
         let users = JSON.parse(localStorage.getItem("users"))
         let newData = {
             id_member: this.state.id_member,

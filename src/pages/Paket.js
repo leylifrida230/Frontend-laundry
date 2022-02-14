@@ -2,6 +2,7 @@ import React from "react";
 import { Modal } from "bootstrap";
 import axios from "axios";
 import { end } from "@popperjs/core";
+import {baseUrl} from "../Config"
 
 class Paket extends React.Component {
     constructor() {
@@ -44,7 +45,7 @@ class Paket extends React.Component {
         this.modalPaket.hide()
 
         if (this.state.action === "tambah") {
-            let endpoint = "http://localhost:8000/paket/" //kudu pake slash belakang
+            let endpoint = `${baseUrl}/paket/` //kudu pake slash belakang
             let newPaket = {
                 jenis_paket: this.state.jenis_paket,
                 harga: this.state.harga
@@ -62,7 +63,7 @@ class Paket extends React.Component {
             // temp.push(newPaket)
             // this.setState({ pakets: temp })
         } else if (this.state.action === "ubah") {
-            let endpoint = "http://localhost:8000/paket/" + this.state.id_paket
+            let endpoint = `${baseUrl}/paket/` + this.state.id_paket
             let newPaket = {
                 jenis_paket: this.state.jenis_paket,
                 harga: this.state.harga
@@ -109,7 +110,7 @@ class Paket extends React.Component {
     hapusPaket(id_paket) {
         if (window.confirm('Apakah anda yakin ingin menghapus data ini ?')) {
 
-            let endpoint = "http://localhost:8000/paket/" + id_paket
+            let endpoint = `${baseUrl}/paket/` + id_paket
 
             axios.delete(endpoint)
                 .then(response => {
@@ -131,7 +132,7 @@ class Paket extends React.Component {
     }
 
     getData() {
-        let endpoint = "http://localhost:8000/paket"
+        let endpoint = `${baseUrl}/paket/`
         axios.get(endpoint)
             .then(response => {
                 this.setState({ pakets: response.data })

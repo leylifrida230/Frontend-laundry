@@ -60,7 +60,7 @@ class Member extends React.Component {
 
         //cek aksi tambah atau ubah
         if (this.state.action === "tambah") {
-            let endpoint = "http://localhost:8000/member"
+            let endpoint = `${baseUrl}/member/`
             // menampung data dari pengguna
             let newMember = {
                 id_member: this.state.id_member,
@@ -103,7 +103,7 @@ class Member extends React.Component {
                 jenis_kelamin: this.state.jenis_kelamin
             }
             
-            let endpoint = "http://localhost:8000/member/" + this.state.id_member
+            let endpoint = `${baseUrl}/member/` + this.state.id_member
 
             axios.put(endpoint, newMember)
             .then(response => {
@@ -147,7 +147,7 @@ class Member extends React.Component {
 
             // this.setState({ members: temp })
 
-            let endpoint = "http://localhost:8000/member/" + id_member
+            let endpoint = `${baseUrl}/member/` + id_member
             // menampung data dari pengguna
 
             axios.delete(endpoint)
@@ -160,7 +160,7 @@ class Member extends React.Component {
     }
 
     getData() {
-        let endpoint = `${baseUrl}/member`
+        let endpoint = `${baseUrl}/member/`
         axios.get(endpoint)
             .then(response => {
                 this.setState({ members: response.data })
