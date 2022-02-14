@@ -6,10 +6,13 @@ import "bootstrap/dist/js/bootstrap.bundle"
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import Trial from './components/Trial';
+import Member from './pages/Member';
+import Paket from './pages/Paket';
+import Users from './pages/Users'
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Member />
   </React.StrictMode>,
   document.getElementById('root')
 );
