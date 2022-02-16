@@ -33,6 +33,8 @@ class Member extends React.Component {
             telepon: "",
             jenis_kelamin: "",
             action: "", //untuk menyimpan aksi dari tambah atau ubah data
+            role: "",
+            visible: true,
         }
     }
 
@@ -171,6 +173,33 @@ class Member extends React.Component {
     componentDidMount() {
         // fungsi ini di jalankan setelah fungsi render berjalan
         this.getData()
+        let user = JSON.parse(localStorage.getItem("users"))
+        //Cara Pertama
+        this.setState({
+            role : user.role
+        })
+
+        // Cara kedua
+        if(user.role === 'admin' || user.role === 'kasir'){
+            this.setState({
+                visible: true
+            })
+        }else(
+            this.setState({
+                visible: false
+            })
+        )
+    }
+
+    showAddButton(){
+        if(this.state.role === 'admin' || this.state.role === 'kasir') {
+            return(
+                <button type='button' class='btn btn-outline-dark'
+                onClick={() => this.tambahData()}>
+                    Tambah
+                </button>
+            )
+        }
     }
 
     render() {
@@ -183,11 +212,10 @@ class Member extends React.Component {
                 </div>
 
                 <div className="card-body">
-
-                    <button className="col-lg-2 btn-primary"
-                        onClick={() => this.tambahData()}>
-                        Tambah Data
-                    </button>
+                    {/* UNTUK BUTTON TAMBAH DATA TAPI BUAT ADMIN SAMA KASIR AJA */}
+                    <div className="col-lg-3">
+                        {this.showAddButton()}
+                    </div>
 
                     <ul className="list-group">
                         {this.state.members.map(member => (
@@ -213,12 +241,12 @@ class Member extends React.Component {
                                         {member.telepon}
                                     </div>
 
-                                    <button small className='btn btn-sm col-sm-1 btn-success mx-1'
+                                    <button small className= {`btn btn-sm col-sm-1 btn-success mx-1 ${this.state.visible ? `` : `d-none`}`}
                                         onClick={() => this.ubahData(member.id_member)}>
                                         Edit
                                     </button>
 
-                                    <button className='btn btn-sm col-sm-1 btn-danger mx-1'
+                                    <button className= {`btn btn-sm col-sm-1 btn-danger mx-1 ${this.state.visible ? `` : `d-none`}`}
                                         onClick={() => this.hapusData(member.id_member)}>
                                         Delete
                                     </button>

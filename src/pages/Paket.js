@@ -2,7 +2,7 @@ import React from "react";
 import { Modal } from "bootstrap";
 import axios from "axios";
 import { end } from "@popperjs/core";
-import {baseUrl} from "../Config"
+import { baseUrl } from "../Config"
 
 class Paket extends React.Component {
     constructor() {
@@ -24,7 +24,8 @@ class Paket extends React.Component {
             id_paket: "",
             jenis_paket: "",
             harga: "",
-            action: ""
+            action: "",
+            visible: true
         }
     }
 
@@ -143,7 +144,35 @@ class Paket extends React.Component {
     componentDidMount() {
         // fungsi ini di jalankan setelah fungsi render berjalan
         this.getData()
+        let user = JSON.parse(localStorage.getItem("users"))
+        //Cara Pertama
+        this.setState({
+            role: user.role
+        })
+
+        // Cara kedua
+        if (user.role === 'admin') {
+            this.setState({
+                visible: true
+            })
+        } else (
+            this.setState({
+                visible: false
+            })
+        )
     }
+
+    showAddButton() {
+        if (this.state.role === 'admin') {
+            return (
+                <button type='button' class='btn btn-outline-dark'
+                    onClick={() => this.tambahData()}>
+                    Tambah
+                </button>
+            )
+        }
+    }
+
 
     render() {
         return (
@@ -155,11 +184,16 @@ class Paket extends React.Component {
                 </div>
 
                 <div className="card-body">
-                    
-                    <button className="col-lg-2 btn-primary"
+
+                    {/* <button className="col-lg-2 btn-primary"
                         onClick={() => this.tambahPaket()}>
                         Tambah Data
-                    </button>
+                    </button> */}
+
+                    {/* UNTUK BUTTON TAMBAH DATA TAPI BUAT ADMIN SAMA KASIR AJA */}
+                    <div className="col-lg-3">
+                        {this.showAddButton()}
+                    </div>
 
                     <ul className="list-group">
                         {this.state.pakets.map(paket => (
@@ -179,12 +213,22 @@ class Paket extends React.Component {
                                     </div>
 
                                     {/**BUTTON */}
-                                    <button className="btn btn-sm col-sm-1 btn-success mx-1"
+                                    {/* <button className="btn btn-sm col-sm-1 btn-success mx-1"
                                         onClick={() => this.ubahPaket(paket.id_paket)}>
                                         Edit
                                     </button>
 
                                     <button className="btn btn-sm col-sm-1 btn-danger mx-1"
+                                        onClick={() => this.hapusPaket(paket.id_paket)}>
+                                        Delete
+                                    </button> */}
+
+                                    <button small className={`btn btn-sm col-sm-1 btn-success mx-1 ${this.state.visible ? `` : `d-none`}`}
+                                        onClick={() => this.ubahPaket(paket.id_paket)}>
+                                        Edit
+                                    </button>
+
+                                    <button className={`btn btn-sm col-sm-1 btn-danger mx-1 ${this.state.visible ? `` : `d-none`}`}
                                         onClick={() => this.hapusPaket(paket.id_paket)}>
                                         Delete
                                     </button>

@@ -1,7 +1,7 @@
 import { Modal } from "bootstrap";
 import React from "react";
 import axios from "axios";
-import { baseUrl} from "../Config"
+import { baseUrl } from "../Config"
 
 class Users extends React.Component {
     constructor() {
@@ -30,7 +30,8 @@ class Users extends React.Component {
             username: "",
             password: "",
             role: "",
-            action: ""
+            action: "",
+            visible: true
         }
     }
 
@@ -166,7 +167,35 @@ class Users extends React.Component {
     componentDidMount() {
         // fungsi ini di jalankan setelah fungsi render berjalan
         this.getData()
+        let user = JSON.parse(localStorage.getItem("users"))
+        //Cara Pertama
+        this.setState({
+            role: user.role
+        })
+
+        // Cara kedua
+        if (user.role === 'admin') {
+            this.setState({
+                visible: true
+            })
+        } else (
+            this.setState({
+                visible: false
+            })
+        )
     }
+
+    showAddButton() {
+        if (this.state.role === 'admin') {
+            return (
+                <button type='button' class='btn btn-outline-dark'
+                    onClick={() => this.tambahData()}>
+                    Tambah
+                </button>
+            )
+        }
+    }
+
 
     render() {
         return (
@@ -179,10 +208,15 @@ class Users extends React.Component {
 
                 <div className="card-body">
 
-                    <button className="col-lg-2 btn-primary"
+                    {/* <button className="col-lg-2 btn-primary"
                         onClick={() => this.tambahUser()}>
                         Tambah Data
-                    </button> <br />
+                    </button> <br/> */}
+
+                    <div className="col-lg-3">
+                        {this.showAddButton()}
+                    </div>
+
                     <ul className="list-group">
                         {this.state.User.map(userr => (
                             <li className="list-group-item">
@@ -206,12 +240,22 @@ class Users extends React.Component {
                                         {userr.role}
                                     </div>
 
-                                    <button small className='btn btn-sm col-sm-1 btn-success mx-1'
+                                    {/* <button small className='btn btn-sm col-sm-1 btn-success mx-1'
                                         onClick={() => this.ubahUser(userr.id_user)}>
                                         Edit
                                     </button>
 
                                     <button className='btn btn-sm col-sm-1 btn-danger mx-1'
+                                        onClick={() => this.hapusUser(userr.id_user)}>
+                                        Delete
+                                    </button> */}
+
+                                    <button small className={`btn btn-sm col-sm-1 btn-success mx-1 ${this.state.visible ? `` : `d-none`}`}
+                                        onClick={() => this.ubahUser(userr.id_user)}>
+                                        Edit
+                                    </button>
+
+                                    <button className={`btn btn-sm col-sm-1 btn-danger mx-1 ${this.state.visible ? `` : `d-none`}`}
                                         onClick={() => this.hapusUser(userr.id_user)}>
                                         Delete
                                     </button>

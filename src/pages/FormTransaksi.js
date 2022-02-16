@@ -44,6 +44,15 @@ export default class FormTransaksi extends React.Component {
     componentDidMount() {
         this.getMember()
         this.getPaket()
+
+        let user = JSON.parse(localStorage.getItem("users"))
+
+        if (user.role !== 'admin' && user.role !== 'kasir') {
+            window.alert(`Maaf anda tidak memiliki akses menuju halaman ini`)
+
+            window.location.href = '/'
+            
+        } 
     }
 
     tambahPaket(e) {

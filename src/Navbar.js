@@ -21,15 +21,13 @@ export default function Navbar(props) {
           {/** define menu */}
           <div className="collapse navbar-collapse" id="#myNav">
             <ul className="navbar-nav mr-auto mb-2 mb-lg-0">
-              {/* <li className="nav-item">
-                <Link to='/' className="nav-link">Home</Link>
-              </li> */}
+              
+              <li className="nav-item">
+                <Link to='/' className="nav-link">Dashhboard</Link>
+              </li>
               <li className="nav-item">
                 <Link to='/Member' className="nav-link">Member</Link>
               </li>
-              {/* <li className="nav-item">
-                <Link to='/Login' className="nav-link">Login</Link>
-              </li> */}
               <li className="nav-item">
                 <Link to='/Users' className="nav-link">User</Link>
               </li>
