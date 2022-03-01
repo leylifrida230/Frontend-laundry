@@ -1,7 +1,7 @@
 import { Modal } from "bootstrap";
 import React from "react";
 import axios from "axios";
-import { baseUrl } from "../Config"
+import { authorization, baseUrl } from "../Config"
 
 class Users extends React.Component {
     constructor() {
@@ -68,7 +68,7 @@ class Users extends React.Component {
                 role: this.state.role
             }
 
-            axios.post(endpoint, newUser)
+            axios.post(endpoint, newUser, authorization)
                 .then(response => {
                     window.alert(response.data.message)
                     this.getData()
@@ -91,7 +91,7 @@ class Users extends React.Component {
                 role: this.state.role
             }
 
-            axios.put(endpoint, newUser)
+            axios.put(endpoint, newUser, authorization)
                 .then(response => {
                     window.alert(response.data.message)
                     this.getData()
@@ -137,7 +137,7 @@ class Users extends React.Component {
         if (window.confirm('Apakah anda yakin ingin menghapus data ini?')) {
             let endpoint = `${baseUrl}/users/` + id_user
 
-            axios.delete(endpoint)
+            axios.delete(endpoint, authorization)
                 .then(response => {
                     window.alert(response.data.message)
                     this.getData()
@@ -157,7 +157,7 @@ class Users extends React.Component {
 
     getData() {
         let endpoint = `${baseUrl}/users/`
-        axios.get(endpoint)
+        axios.get(endpoint, authorization)
             .then(response => {
                 this.setState({ User: response.data })
             })

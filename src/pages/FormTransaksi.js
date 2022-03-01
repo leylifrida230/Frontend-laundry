@@ -1,7 +1,7 @@
 import axios from "axios";
 import React from "react";
 import { Modal } from "bootstrap"
-import { baseUrl } from "../Config";
+import { authorization, baseUrl } from "../Config";
 
 export default class FormTransaksi extends React.Component {
     constructor() {
@@ -25,7 +25,7 @@ export default class FormTransaksi extends React.Component {
 
     getMember() {
         let endpoint = `${baseUrl}/member/`
-        axios.get(endpoint)
+        axios.get(endpoint, authorization)
             .then(response => {
                 this.setState({ members: response.data })
             })
@@ -34,7 +34,7 @@ export default class FormTransaksi extends React.Component {
 
     getPaket() {
         let endpoint = `${baseUrl}/paket/`
-        axios.get(endpoint)
+        axios.get(endpoint, authorization)
             .then(response => {
                 this.setState({ pakets: response.data })
             })
@@ -63,7 +63,7 @@ export default class FormTransaksi extends React.Component {
         let idPaket = this.state.id_paket
         let tempPaket = this.state.id_paket
         let SelectedPaket = this.state.pakets.find(
-            paket => paket.id_paket == idPaket
+            paket => paket.id_paket === idPaket
         )
         let newPaket = {
             id_paket: this.state.id_paket,
@@ -96,7 +96,7 @@ export default class FormTransaksi extends React.Component {
     hapusPaket(id_paket){
         if (window.confirm("apakah anda yakin akan menghapus data ini?")) {
             let endpoint = `${baseUrl}/paket/` + id_paket
-            axios.delete(endpoint)
+            axios.delete(endpoint, authorization)
             .then(response => {
                 window.alert(response.data.message)
                 this.getData()
@@ -118,7 +118,7 @@ export default class FormTransaksi extends React.Component {
             id_user: users.id_users,
             detail_transaksi: this.state.detail_transaksi
         }
-        axios.post(endpoint, newData)
+        axios.post(endpoint, newData, authorization)
         .then(response => {
             window.alert(response.data.message)
         })

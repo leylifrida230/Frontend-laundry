@@ -2,7 +2,7 @@ import React from "react";
 import { Modal } from "bootstrap";
 import axios from "axios";
 import { end } from "@popperjs/core";
-import { baseUrl } from "../Config"
+import { authorization, baseUrl } from "../Config"
 
 class Paket extends React.Component {
     constructor() {
@@ -52,7 +52,7 @@ class Paket extends React.Component {
                 harga: this.state.harga
             }
 
-            axios.post(endpoint, newPaket)
+            axios.post(endpoint, newPaket, authorization)
                 .then(response => {
                     window.alert(response.data.message)
                     this.getData()
@@ -70,7 +70,7 @@ class Paket extends React.Component {
                 harga: this.state.harga
             }
 
-            axios.put(endpoint, newPaket)
+            axios.put(endpoint, newPaket, authorization)
                 .then(response => {
                     window.alert(response.data.message)
                     this.getData()
@@ -113,7 +113,7 @@ class Paket extends React.Component {
 
             let endpoint = `${baseUrl}/paket/` + id_paket
 
-            axios.delete(endpoint)
+            axios.delete(endpoint, authorization)
                 .then(response => {
                     window.alert(response.data.message)
                     this.getData()
@@ -134,7 +134,7 @@ class Paket extends React.Component {
 
     getData() {
         let endpoint = `${baseUrl}/paket/`
-        axios.get(endpoint)
+        axios.get(endpoint, authorization)
             .then(response => {
                 this.setState({ pakets: response.data })
             })
