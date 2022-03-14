@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import { authorization, baseUrl } from "../Config";
+import { authorization, baseUrl, formatNumber } from "../Config";
 
 export default class Dashboard extends React.Component {
     constructor() {
@@ -52,7 +52,7 @@ export default class Dashboard extends React.Component {
 
                     income += total
                 }
-                this.setState({ 
+                this.setState({
                     jmlTransaksi: response.data.length,
                     income: income
                 })
@@ -102,7 +102,7 @@ export default class Dashboard extends React.Component {
                         <div className="card bg-secondary m-1">
                             <div className="card-body">
                                 <h4 className="card-title">Income</h4>
-                                <h2>Rp {this.state.income}</h2>
+                                <h2>Rp {formatNumber(this.state.income)}</h2>
                             </div>
                         </div>
                     </div>

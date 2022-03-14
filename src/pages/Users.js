@@ -199,48 +199,49 @@ class Users extends React.Component {
 
     render() {
         return (
-            <div className="card">
-                <div className="card-header bg-primary">
-                    <h4 className="text-white">
-                        List Daftar User
-                    </h4>
-                </div>
+            <div className="container">
+                <div className="card">
+                    <div className="card-header bg-primary">
+                        <h4 className="text-white">
+                            List Daftar User
+                        </h4>
+                    </div>
 
-                <div className="card-body">
+                    <div className="card-body">
 
-                    {/* <button className="col-lg-2 btn-primary"
+                        {/* <button className="col-lg-2 btn-primary"
                         onClick={() => this.tambahUser()}>
                         Tambah Data
                     </button> <br/> */}
 
-                    <div className="col-lg-3">
-                        {this.showAddButton()}
-                    </div>
+                        <div className="col-lg-3">
+                            {this.showAddButton()}
+                        </div>
 
-                    <ul className="list-group">
-                        {this.state.User.map(userr => (
-                            <li className="list-group-item">
-                                <div className="row">
+                        <ul className="list-group">
+                            {this.state.User.map(userr => (
+                                <li className="list-group-item">
+                                    <div className="row">
 
-                                    {/** BAGIAN NAMA */}
-                                    <div className="col-lg-3">
-                                        <small className="text-info">Nama</small> <br />
-                                        {userr.nama}
-                                    </div>
+                                        {/** BAGIAN NAMA */}
+                                        <div className="col-lg-3">
+                                            <small className="text-info">Nama</small> <br />
+                                            {userr.nama}
+                                        </div>
 
-                                    {/** USERNAME */}
-                                    <div className="col-lg-3">
-                                        <small className="text-info">Username</small> <br />
-                                        {userr.username}
-                                    </div>
+                                        {/** USERNAME */}
+                                        <div className="col-lg-3">
+                                            <small className="text-info">Username</small> <br />
+                                            {userr.username}
+                                        </div>
 
-                                    {/** ROLE */}
-                                    <div className="col-lg-3">
-                                        <small className="text-info">Role</small> <br />
-                                        {userr.role}
-                                    </div>
+                                        {/** ROLE */}
+                                        <div className="col-lg-3">
+                                            <small className="text-info">Role</small> <br />
+                                            {userr.role}
+                                        </div>
 
-                                    {/* <button small className='btn btn-sm col-sm-1 btn-success mx-1'
+                                        {/* <button small className='btn btn-sm col-sm-1 btn-success mx-1'
                                         onClick={() => this.ubahUser(userr.id_user)}>
                                         Edit
                                     </button>
@@ -250,73 +251,80 @@ class Users extends React.Component {
                                         Delete
                                     </button> */}
 
-                                    <button small className={`btn btn-sm col-sm-1 btn-success mx-1 ${this.state.visible ? `` : `d-none`}`}
-                                        onClick={() => this.ubahUser(userr.id_user)}>
-                                        Edit
-                                    </button>
+                                        <div className="col-lg-3">
+                                            <small className="text-info">Action</small> <br />
+                                            <button small className={`btn btn-sm btn-success mx-1 ${this.state.visible ? `` : `d-none`}`}
+                                                onClick={() => this.ubahUser(userr.id_user)}>
+                                                Edit
+                                            </button>
 
-                                    <button className={`btn btn-sm col-sm-1 btn-danger mx-1 ${this.state.visible ? `` : `d-none`}`}
-                                        onClick={() => this.hapusUser(userr.id_user)}>
-                                        Delete
-                                    </button>
+                                            <button className={`btn btn-sm btn-danger mx-1 ${this.state.visible ? `` : `d-none`}`}
+                                                onClick={() => this.hapusUser(userr.id_user)}>
+                                                Delete
+                                            </button>
 
-                                </div>
-                            </li>
-                        ))} <br />
-                    </ul>
+                                        </div>
 
-                    {/** FORM MODAL USER */}
-                    <div className="modal" id="modal-users">
-                        <div className="modal-dialog modal-md">
-                            <div className="modal-content">
-                                <div className="modal-header bg-success">
-                                    <h4 className="text-white">
-                                        Form Users
-                                    </h4>
-                                </div>
 
-                                <div className="modal-body">
-                                    <form onSubmit={ev => this.simpanUser(ev)}>
-                                        Nama
-                                        <input type="text" className="form-control mb-2"
-                                            value={this.state.nama}
-                                            onChange={ev => this.setState({ nama: ev.target.value })}
-                                            required
-                                        />
+                                    </div>
+                                </li>
+                            ))} <br />
+                        </ul>
 
-                                        Username
-                                        <input type="text" className="form-control mb-2"
-                                            value={this.state.username}
-                                            onChange={ev => this.setState({ username: ev.target.value })}
-                                            required
-                                        />
+                        {/** FORM MODAL USER */}
+                        <div className="modal" id="modal-users">
+                            <div className="modal-dialog modal-md">
+                                <div className="modal-content">
+                                    <div className="modal-header bg-success">
+                                        <h4 className="text-white">
+                                            Form Users
+                                        </h4>
+                                    </div>
 
-                                        Password
-                                        <input type="password" className="form-control mb-2"
-                                            value={this.state.password}
-                                            onChange={ev => this.setState({ password: ev.target.value })}
-                                            required
-                                        />
+                                    <div className="modal-body">
+                                        <form onSubmit={ev => this.simpanUser(ev)}>
+                                            Nama
+                                            <input type="text" className="form-control mb-2"
+                                                value={this.state.nama}
+                                                onChange={ev => this.setState({ nama: ev.target.value })}
+                                                required
+                                            />
 
-                                        Role
-                                        <select className="form-control mb2"
-                                            value={this.state.role}
-                                            onChange={ev => this.setState({ role: ev.target.value })}>
-                                            <option value="Admin">Admin</option>
-                                            <option value="Member">Member</option>
-                                            <option value="Kasir">Kasir</option>
-                                        </select>
+                                            Username
+                                            <input type="text" className="form-control mb-2"
+                                                value={this.state.username}
+                                                onChange={ev => this.setState({ username: ev.target.value })}
+                                                required
+                                            />
 
-                                        <button className="btn btn-success btn-sm" type="submit">
-                                            Simpan
-                                        </button>
-                                    </form>
+                                            Password
+                                            <input type="password" className="form-control mb-2"
+                                                value={this.state.password}
+                                                onChange={ev => this.setState({ password: ev.target.value })}
+                                                required
+                                            />
+
+                                            Role
+                                            <select className="form-control mb2"
+                                                value={this.state.role}
+                                                onChange={ev => this.setState({ role: ev.target.value })}>
+                                                <option value="Admin">Admin</option>
+                                                <option value="Member">Member</option>
+                                                <option value="Kasir">Kasir</option>
+                                            </select>
+
+                                            <button className="btn btn-success btn-sm" type="submit">
+                                                Simpan
+                                            </button>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
         )
     }
 }

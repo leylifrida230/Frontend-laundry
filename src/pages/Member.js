@@ -2,7 +2,7 @@ import React from "react";
 import { Modal } from "bootstrap"
 import axios from "axios"
 import { data } from "jquery";
-import {authorization, baseUrl} from "../Config"
+import { authorization, baseUrl } from "../Config"
 
 class Member extends React.Component {
     constructor() {
@@ -85,7 +85,7 @@ class Member extends React.Component {
                 })
                 .catch(error => console.log(error))
 
-        }else if(this.state.action === "ubah"){
+        } else if (this.state.action === "ubah") {
             // let temp = this.state.members
             // let index = temp.findIndex(
             //     member => member.id_member === this.state.id_member
@@ -104,15 +104,15 @@ class Member extends React.Component {
                 telepon: this.state.telepon,
                 jenis_kelamin: this.state.jenis_kelamin
             }
-            
+
             let endpoint = `${baseUrl}/member/` + this.state.id_member
 
             axios.put(endpoint, newMember, authorization)
-            .then(response => {
-                window.alert(response.data.message)
-                this.getData()
-            })
-            .catch(error => console.log(error))
+                .then(response => {
+                    window.alert(response.data.message)
+                    this.getData()
+                })
+                .catch(error => console.log(error))
 
             this.modalMember.hide()
         }
@@ -176,26 +176,26 @@ class Member extends React.Component {
         let user = JSON.parse(localStorage.getItem("users"))
         //Cara Pertama
         this.setState({
-            role : user.role
+            role: user.role
         })
 
         // Cara kedua
-        if(user.role === 'admin' || user.role === 'kasir'){
+        if (user.role === 'admin' || user.role === 'kasir') {
             this.setState({
                 visible: true
             })
-        }else(
+        } else (
             this.setState({
                 visible: false
             })
         )
     }
 
-    showAddButton(){
-        if(this.state.role === 'admin' || this.state.role === 'kasir') {
-            return(
+    showAddButton() {
+        if (this.state.role === 'admin' || this.state.role === 'kasir') {
+            return (
                 <button type='button' class='btn btn-outline-dark'
-                onClick={() => this.tambahData()}>
+                    onClick={() => this.tambahData()}>
                     Tambah
                 </button>
             )
@@ -204,109 +204,116 @@ class Member extends React.Component {
 
     render() {
         return (
-            <div className="card" >
-                <div className="card-header bg-primary" >
-                    <h4 className="text-white">
-                        List Daftar Member
-                    </h4>
-                </div>
-
-                <div className="card-body">
-                    {/* UNTUK BUTTON TAMBAH DATA TAPI BUAT ADMIN SAMA KASIR AJA */}
-                    <div className="col-lg-3">
-                        {this.showAddButton()}
+            <div className="container">
+                <div className="card" >
+                    <div className="card-header bg-primary" >
+                        <h4 className="text-white">
+                            List Daftar Member
+                        </h4>
                     </div>
 
-                    <ul className="list-group">
-                        {this.state.members.map(member => (
-                            <li className="list-group-item">
-                                {/* list group item lebih responsif */}
-                                <div className="row">
-                                    {/* clasname : row, berguna untuk menyusun data ke samping, karena defaultnya ke bawah*/}
-                                    {/* BAGIAN NAMA*/}
-                                    <div className="col-lg-4">
-                                        <small className="text-info">Nama</small> <br />
-                                        {member.nama}
+                    <div className="card-body">
+                        {/* UNTUK BUTTON TAMBAH DATA TAPI BUAT ADMIN SAMA KASIR AJA */}
+                        <div className="col-lg-3">
+                            {this.showAddButton()}
+                        </div>
+
+                        <ul className="list-group">
+                            {this.state.members.map(member => (
+                                <li className="list-group-item">
+                                    {/* list group item lebih responsif */}
+                                    <div className="row">
+                                        {/* clasname : row, berguna untuk menyusun data ke samping, karena defaultnya ke bawah*/}
+                                        {/* BAGIAN NAMA*/}
+                                        <div className="col-lg-4">
+                                            <small className="text-info">Nama</small> <br />
+                                            {member.nama}
+                                        </div>
+
+                                        {/* BAGIAN GENDER*/}
+                                        <div className="col-lg-2">
+                                            <small className="text-info">Gender</small> <br />
+                                            {member.jenis_kelamin}
+                                        </div>
+
+                                        {/* BAGIAN TELEPON*/}
+                                        <div className="col-lg-3">
+                                            <small className="text-info">Telepon</small> <br />
+                                            {member.telepon}
+                                        </div>
+
+                                        <div className="col-lg-2">
+                                            <small className="text-info">Action</small> <br />
+                                            <button small className={`btn btn-sm btn-success mx-1 ${this.state.visible ? `` : `d-none`}`}
+                                                onClick={() => this.ubahData(member.id_member)}>
+                                                Edit
+                                            </button>
+
+                                            <button className={`btn btn-sm btn-danger mx-1 ${this.state.visible ? `` : `d-none`}`}
+                                                onClick={() => this.hapusData(member.id_member)}>
+                                                Delete
+                                            </button>
+                                        </div>
+
+
+
+                                        {/* BAGIAN ALAMAT*/}
+                                        <div className="col-lg-12">
+                                            <small className="text-info">Alamat</small> <br />
+                                            {member.alamat}
+                                        </div>
+
+                                    </div>
+                                </li>
+                            ))}
+                        </ul>
+
+                        {/** Form Modal Member */}
+                        <div className="modal" id="modal-member" > {/** AND THIS "modal-member" harus sama seyeng */}
+                            <div className="modal-dialog modal-md">
+                                <div className="modal-content">
+                                    <div className="modal-header bg-success">
+                                        <h4 className="text-white">
+                                            Form Member
+                                        </h4>
                                     </div>
 
-                                    {/* BAGIAN GENDER*/}
-                                    <div className="col-lg-2">
-                                        <small className="text-info">Gender</small> <br />
-                                        {member.jenis_kelamin}
+                                    <div className="modal-body">
+                                        <form onSubmit={ev => this.simpanData(ev)}>
+                                            Nama
+                                            <input type="text" className="form-control mb-2"
+                                                value={this.state.nama}
+                                                onChange={ev => this.setState({ nama: ev.target.value })}
+                                                required
+                                            />
+
+                                            Alamat
+                                            <input type="text" className="form-control mb-2"
+                                                value={this.state.alamat}
+                                                onChange={ev => this.setState({ alamat: ev.target.value })}
+                                                required
+                                            />
+
+                                            Telepon
+                                            <input type="text" className="form-control mb-2"
+                                                value={this.state.telepon}
+                                                onChange={ev => this.setState({ telepon: ev.target.value })}
+                                                required
+                                            />
+
+                                            Gender
+                                            <select className="form-control mb2"
+                                                value={this.state.jenis_kelamin}
+                                                onChange={ev => this.setState({ jenis_kelamin: ev.target.value })}>
+                                                <option value="pria">Pria</option>
+                                                <option value="wanita">Wanita</option>
+                                            </select>
+
+                                            <button className="btn btn-success btn-sm" type="submit">
+                                                Save
+                                            </button>
+                                        </form>
                                     </div>
-
-                                    {/* BAGIAN TELEPON*/}
-                                    <div className="col-lg-3">
-                                        <small className="text-info">Telepon</small> <br />
-                                        {member.telepon}
-                                    </div>
-
-                                    <button small className= {`btn btn-sm col-sm-1 btn-success mx-1 ${this.state.visible ? `` : `d-none`}`}
-                                        onClick={() => this.ubahData(member.id_member)}>
-                                        Edit
-                                    </button>
-
-                                    <button className= {`btn btn-sm col-sm-1 btn-danger mx-1 ${this.state.visible ? `` : `d-none`}`}
-                                        onClick={() => this.hapusData(member.id_member)}>
-                                        Delete
-                                    </button>
-
-                                    {/* BAGIAN ALAMAT*/}
-                                    <div className="col-lg-12">
-                                        <small className="text-info">Alamat</small> <br />
-                                        {member.alamat}
-                                    </div>
-
-                                </div>
-                            </li>
-                        ))}
-                    </ul>
-
-                    {/** Form Modal Member */}
-                    <div className="modal" id="modal-member" > {/** AND THIS "modal-member" harus sama seyeng */}
-                        <div className="modal-dialog modal-md">
-                            <div className="modal-content">
-                                <div className="modal-header bg-success">
-                                    <h4 className="text-white">
-                                        Form Member
-                                    </h4>
-                                </div>
-
-                                <div className="modal-body">
-                                    <form onSubmit={ev => this.simpanData(ev)}>
-                                        Nama
-                                        <input type="text" className="form-control mb-2"
-                                            value={this.state.nama}
-                                            onChange={ev => this.setState({ nama: ev.target.value })}
-                                            required
-                                        />
-
-                                        Alamat
-                                        <input type="text" className="form-control mb-2"
-                                            value={this.state.alamat}
-                                            onChange={ev => this.setState({ alamat: ev.target.value })}
-                                            required
-                                        />
-
-                                        Telepon
-                                        <input type="text" className="form-control mb-2"
-                                            value={this.state.telepon}
-                                            onChange={ev => this.setState({ telepon: ev.target.value })}
-                                            required
-                                        />
-
-                                        Gender
-                                        <select className="form-control mb2"
-                                            value={this.state.jenis_kelamin}
-                                            onChange={ev => this.setState({ jenis_kelamin: ev.target.value })}>
-                                            <option value="pria">Pria</option>
-                                            <option value="wanita">Wanita</option>
-                                        </select>
-
-                                        <button className="btn btn-success btn-sm" type="submit">
-                                            Save
-                                        </button>
-                                    </form>
                                 </div>
                             </div>
                         </div>

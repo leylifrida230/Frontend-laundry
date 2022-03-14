@@ -2,7 +2,7 @@ import React from "react";
 import { Modal } from "bootstrap";
 import axios from "axios";
 import { end } from "@popperjs/core";
-import { authorization, baseUrl } from "../Config"
+import { authorization, baseUrl, formatNumber } from "../Config"
 
 class Paket extends React.Component {
     constructor() {
@@ -152,6 +152,7 @@ class Paket extends React.Component {
 
         // Cara kedua
         if (user.role === 'admin') {
+
             this.setState({
                 visible: true
             })
@@ -176,44 +177,45 @@ class Paket extends React.Component {
 
     render() {
         return (
-            <div className="card">
-                <div className="card-header bg-primary">
-                    <h4 className="text-white">
-                        List Daftar Paket
-                    </h4>
-                </div>
+            <div className="container">
+                <div className="card">
+                    <div className="card-header bg-primary">
+                        <h4 className="text-white">
+                            List Daftar Paket
+                        </h4>
+                    </div>
 
-                <div className="card-body">
+                    <div className="card-body">
 
-                    {/* <button className="col-lg-2 btn-primary"
+                        {/* <button className="col-lg-2 btn-primary"
                         onClick={() => this.tambahPaket()}>
                         Tambah Data
                     </button> */}
 
-                    {/* UNTUK BUTTON TAMBAH DATA TAPI BUAT ADMIN SAMA KASIR AJA */}
-                    <div className="col-lg-3">
-                        {this.showAddButton()}
-                    </div>
+                        {/* UNTUK BUTTON TAMBAH DATA TAPI BUAT ADMIN SAMA KASIR AJA */}
+                        <div className="col-lg-3">
+                            {this.showAddButton()}
+                        </div>
 
-                    <ul className="list-group">
-                        {this.state.pakets.map(paket => (
-                            <li className="list-group-item">
-                                <div className="row">
+                        <ul className="list-group">
+                            {this.state.pakets.map(paket => (
+                                <li className="list-group-item">
+                                    <div className="row">
 
-                                    {/** BAGIAN JENIS PAKET */}
-                                    <div className="col-lg-5">
-                                        <small className="text-info">Paket</small> <br />
-                                        {paket.jenis_paket}
-                                    </div>
+                                        {/** BAGIAN JENIS PAKET */}
+                                        <div className="col-lg-5">
+                                            <small className="text-info">Paket</small> <br />
+                                            {paket.jenis_paket}
+                                        </div>
 
-                                    {/** BAGIAN HARGA PAKET */}
-                                    <div className="col-lg-4">
-                                        <small className="text-info">Harga</small> <br />
-                                        {paket.harga}
-                                    </div>
+                                        {/** BAGIAN HARGA PAKET */}
+                                        <div className="col-lg-4 ">
+                                            <small className="text-info">Harga</small> <br />
+                                            {formatNumber(paket.harga)}
+                                        </div>
 
-                                    {/**BUTTON */}
-                                    {/* <button className="btn btn-sm col-sm-1 btn-success mx-1"
+                                        {/**BUTTON */}
+                                        {/* <button className="btn btn-sm col-sm-1 btn-success mx-1"
                                         onClick={() => this.ubahPaket(paket.id_paket)}>
                                         Edit
                                     </button>
@@ -223,58 +225,64 @@ class Paket extends React.Component {
                                         Delete
                                     </button> */}
 
-                                    <button small className={`btn btn-sm col-sm-1 btn-success mx-1 ${this.state.visible ? `` : `d-none`}`}
-                                        onClick={() => this.ubahPaket(paket.id_paket)}>
-                                        Edit
-                                    </button>
+                                        <div className="col-lg-3">
+                                            <small className="text-info">Action</small> <br />
 
-                                    <button className={`btn btn-sm col-sm-1 btn-danger mx-1 ${this.state.visible ? `` : `d-none`}`}
-                                        onClick={() => this.hapusPaket(paket.id_paket)}>
-                                        Delete
-                                    </button>
-                                </div>
-                            </li>
-                        ))} <br />
+                                            <button small className={`btn btn-sm btn-success mx-1 ${this.state.visible ? `` : `d-none`}`}
+                                                onClick={() => this.ubahPaket(paket.id_paket)}>
+                                                Edit
+                                            </button>
+
+                                            <button className={`btn btn-sm btn-danger mx-1 ${this.state.visible ? `` : `d-none`}`}
+                                                onClick={() => this.hapusPaket(paket.id_paket)}>
+                                                Delete
+                                            </button>
+                                        </div>
+                                    </div>
+                                </li>
+                            ))} <br />
 
 
-                    </ul>
+                        </ul>
 
-                    {/** FORM MODAL PAKET */}
-                    <div className="modal" id="modal-paket">
-                        <div className="modal-dialog modal-md">
-                            <div className="modal-content">
-                                <div className="modal-header bg-success">
-                                    <h4 className="text-white">
-                                        Form Paket
-                                    </h4>
-                                </div>
+                        {/** FORM MODAL PAKET */}
+                        <div className="modal" id="modal-paket">
+                            <div className="modal-dialog modal-md">
+                                <div className="modal-content">
+                                    <div className="modal-header bg-success">
+                                        <h4 className="text-white">
+                                            Form Paket
+                                        </h4>
+                                    </div>
 
-                                <div className="modal-body">
-                                    <form onSubmit={ev => this.simpanPaket(ev)}>
-                                        Jenis Paket
-                                        <input type="text" className="form-control mb-2"
-                                            value={this.state.jenis_paket}
-                                            onChange={ev => this.setState({ jenis_paket: ev.target.value })}
-                                            required
-                                        />
+                                    <div className="modal-body">
+                                        <form onSubmit={ev => this.simpanPaket(ev)}>
+                                            Jenis Paket
+                                            <input type="text" className="form-control mb-2"
+                                                value={this.state.jenis_paket}
+                                                onChange={ev => this.setState({ jenis_paket: ev.target.value })}
+                                                required
+                                            />
 
-                                        Harga
-                                        <input type='text' className="form-control mb-2"
-                                            value={this.state.harga}
-                                            onChange={ev => this.setState({ harga: ev.target.value })}
-                                            required
-                                        />
+                                            Harga
+                                            <input type='text' className="form-control mb-2"
+                                                value={this.state.harga}
+                                                onChange={ev => this.setState({ harga: ev.target.value })}
+                                                required
+                                            />
 
-                                        <button className="btn btn-success btn-sm" type="submit">
-                                            Save
-                                        </button>
-                                    </form>
+                                            <button className="btn btn-success btn-sm" type="submit">
+                                                Save
+                                            </button>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
         )
     }
 }

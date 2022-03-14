@@ -1,6 +1,8 @@
 import React from "react";
 import axios from "axios";
-import { authorization, baseUrl } from "../Config"
+import { authorization, baseUrl, formatNumber } from "../Config"
+import ReactToPdf from "react-to-pdf"
+import domToPdf from "dom-to-pdf"
 
 export default class Transaksi extends React.Component {
     constructor() {
@@ -160,121 +162,161 @@ export default class Transaksi extends React.Component {
         }
     }
 
+    convertPdf() {
+        // ambil elemen yang akan di convert ke pdf
+        let element = document.getElementById(`target`)
+        let options = {
+            filename: "Laporan.pdf"
+        }
+
+        domToPdf(element, options, () => {
+            window.alert("File akan segera di download")
+        })
+    }
+
     render() {
+        const target = React.createRef()
+        const optionPdf = {
+            orientation: `landscape`,
+            unit: `cm`,
+            format: [21, 29.7]
+        }
         return (
-            <div className="card">
-                <div className="card-header bg-info">
-                    <h4 className="text-white">
-                        List Transaksi
-                    </h4>
-                </div>
+            <div className="container">
+                <div className="card">
+                    <div className="card-header bg-info">
+                        <h4 className="text-white">
+                            List Transaksi
+                        </h4>
+                    </div>
 
-                <div className="card-body">
-                    <ul className="list-group">
-                        {this.state.transaksi.map(trans => (
-                            <li className="list-group-item">
-                                <div className="row">
-                                    {/** Member area */}
-                                    <div className="col-lg-3">
-                                        <small className="text-info">
-                                            Member
-                                        </small><br />
-                                        {trans.member.nama}
-                                    </div>
+                    <div className="card-body">
 
-                                    {/** Tanggal Transaksi area */}
-                                    <div className="col-lg-3">
-                                        <small className="text-info">
-                                            Tanggal Transaki
-                                        </small><br />
-                                        {trans.tgl}
-                                    </div>
+                        {/* LAPORAN PDF */}
+                        {/* <ReactToPdf targetRef={target} filename='Laporan.pdf'
+                        scale={0.8} options={optionPdf}>
+                        {({ toPdf }) => (
+                            <button className="btn btn-danger" onClick={toPdf}>
+                                Generate PDF
+                            </button>
+                        )}
+                    </ReactToPdf> */}
 
-                                    {/** Batas Waktu area */}
-                                    <div className="col-lg-3">
-                                        <small className="text-info">
-                                            Batas Waktu
-                                        </small><br />
-                                        {trans.batas_waktu}
-                                    </div>
+                        <button className="btn btn-danger"
+                            onClick={() => this.convertPdf()}>
+                            Convert
+                        </button>
 
-                                    {/** Tanggal Bayar area */}
-                                    <div className="col-lg-3">
-                                        <small className="text-info">
-                                            Tanggal Bayar
-                                        </small><br />
-                                        {trans.tgl_bayar}
-                                    </div>
+                        <div ref={target} id="target">
+                            <h3>List Transaksi</h3>
+                            <ul className="list-group">
+                                {this.state.transaksi.map(trans => (
+                                    <li className="list-group-item">
+                                        <div className="row">
+                                            {/** Member area */}
+                                            <div className="col-lg-3">
+                                                <small className="text-info">
+                                                    Member
+                                                </small><br />
+                                                {trans.member.nama}
+                                            </div>
 
-                                    {/** Status area */}
-                                    <div className="col-lg-3">
-                                        <small className="text-info">
-                                            Status
-                                        </small><br />
-                                        {this.convertStatus(trans.id_transaksi, trans.status)}
-                                    </div>
+                                            {/** Tanggal Transaksi area */}
+                                            <div className="col-lg-3">
+                                                <small className="text-info">
+                                                    Tanggal Transaki
+                                                </small><br />
+                                                {trans.tgl}
+                                            </div>
 
-                                    {/** Status Pembayaran area */}
-                                    <div className="col-lg-3">
-                                        <small className="text-info">
-                                            Status Pembayaran
-                                        </small><br />
-                                        {this.convertStatusBayar(trans.id_transaksi, trans.dibayar)}
-                                    </div>
+                                            {/** Batas Waktu area */}
+                                            <div className="col-lg-3">
+                                                <small className="text-info">
+                                                    Batas Waktu
+                                                </small><br />
+                                                {trans.batas_waktu}
+                                            </div>
 
-                                    {/* this is total area */}
-                                    <div className="col-lg-3">
-                                        <small className="text-info">
-                                            Total
-                                        </small><br />
-                                        Rp {trans.total}
-                                    </div>
+                                            {/** Tanggal Bayar area */}
+                                            <div className="col-lg-3">
+                                                <small className="text-info">
+                                                    Tanggal Bayar
+                                                </small><br />
+                                                {trans.tgl_bayar}
+                                            </div>
 
-                                    {/* DELETE BUTTON */}
-                                    <div className="col-lg-3">
-                                        <small className="text-info">
-                                            Option
-                                        </small><br />
-                                        {/* <button className='btn btn-sm btn-danger'
+                                            {/** Status area */}
+                                            <div className="col-lg-3">
+                                                <small className="text-info">
+                                                    Status
+                                                </small><br />
+                                                {this.convertStatus(trans.id_transaksi, trans.status)}
+                                            </div>
+
+                                            {/** Status Pembayaran area */}
+                                            <div className="col-lg-3">
+                                                <small className="text-info">
+                                                    Status Pembayaran
+                                                </small><br />
+                                                {this.convertStatusBayar(trans.id_transaksi, trans.dibayar)}
+                                            </div>
+
+                                            {/* this is total area */}
+                                            <div className="col-lg-3">
+                                                <small className="text-info">
+                                                    Total
+                                                </small><br />
+                                                Rp {formatNumber(trans.total)}
+                                            </div>
+
+                                            {/* DELETE BUTTON */}
+                                            <div className="col-lg-3">
+                                                <small className="text-info">
+                                                    Option
+                                                </small><br />
+                                                {/* <button className='btn btn-sm btn-danger'
                                             onClick={() => this.HapusTransaksi(trans.id_transaksi)}>
                                             Hapus
                                         </button> */}
-                                        <button className={`btn btn-sm btn-danger ${this.state.visible ? `` : `d-none`}`}
-                                        onClick={() => this.HapusTransaksi(trans.id_transaksi)}>
-                                        Delete
-                                    </button>
-                                    </div>
-                                </div>
+                                                <button className={`btn btn-sm btn-danger ${this.state.visible ? `` : `d-none`}`}
+                                                    onClick={() => this.HapusTransaksi(trans.id_transaksi)}>
+                                                    Delete
+                                                </button>
+                                            </div>
+                                        </div>
 
-                                <hr />
+                                        <hr />
 
-                                {/** Area Detail Transaksi */}
-                                <h5>Detail Transaksi</h5>
-                                {trans.detail_transaksi.map(detail => (
-                                    <div className="row">
-                                        {/** area Nama Paket */}
-                                        <div className="col-lg-3">
-                                            {detail.paket.jenis_paket}
-                                        </div>
-                                        {/** area Quantity */}
-                                        <div className="col-lg-2">
-                                            Qty :  {detail.qty}
-                                        </div>
-                                        {/** area Harga Paket */}
-                                        <div className="col-lg-3">
-                                            @ Rp {detail.paket.harga}
-                                        </div>
-                                        {/** area Harga Total */}
-                                        <div className="col-lg-4">
-                                            Total Rp {detail.paket.harga * detail.qty}
-                                        </div>
-                                    </div>
+                                        {/** Area Detail Transaksi */}
+                                        <h5>Detail Transaksi</h5>
+                                        {trans.detail_transaksi.map(detail => (
+                                            <div className="row">
+                                                {/** area Nama Paket */}
+                                                <div className="col-lg-3">
+                                                    {detail.paket.jenis_paket}
+                                                </div>
+                                                {/** area Quantity */}
+                                                <div className="col-lg-2">
+                                                    Qty :  {detail.qty}
+                                                </div>
+                                                {/** area Harga Paket */}
+                                                <div className="col-lg-3">
+                                                    @ Rp {formatNumber(detail.paket.harga)}
+                                                </div>
+                                                {/** area Harga Total */}
+                                                <div className="col-lg-4">
+                                                    Total Rp {formatNumber(detail.paket.harga * detail.qty)}
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </li>
                                 ))}
-                            </li>
-                        ))}
-                    </ul>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
+
         )
     }
 }

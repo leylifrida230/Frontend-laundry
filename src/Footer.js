@@ -1,9 +1,12 @@
 import React from "react";
+import "./NavBar.css"
 
-function Footer(){
-    return(
-        <div>
-            <h4>This Is Footer</h4>
+function Footer() {
+    return (
+        <div className="footer" >
+            <p>
+                ~ Made by love from Leyy ~
+            </p>
         </div>
     )
 }

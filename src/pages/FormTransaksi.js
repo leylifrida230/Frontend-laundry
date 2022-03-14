@@ -1,7 +1,7 @@
 import axios from "axios";
 import React from "react";
 import { Modal } from "bootstrap"
-import { authorization, baseUrl } from "../Config";
+import { authorization, baseUrl, formatNumber } from "../Config";
 
 export default class FormTransaksi extends React.Component {
     constructor() {
@@ -61,9 +61,8 @@ export default class FormTransaksi extends React.Component {
         // digunakan untuk menyimpan data paket yang dipilih 
         // beserta jumlahnya kedalam array detail_transaksi
         let idPaket = this.state.id_paket
-        let tempPaket = this.state.id_paket
         let SelectedPaket = this.state.pakets.find(
-            paket => paket.id_paket === idPaket
+            paket => paket.id_paket == idPaket
         )
         let newPaket = {
             id_paket: this.state.id_paket,
@@ -94,14 +93,22 @@ export default class FormTransaksi extends React.Component {
     }
 
     hapusPaket(id_paket){
-        if (window.confirm("apakah anda yakin akan menghapus data ini?")) {
-            let endpoint = `${baseUrl}/paket/` + id_paket
-            axios.delete(endpoint, authorization)
-            .then(response => {
-                window.alert(response.data.message)
-                this.getData()
-            })
-            .catch(error => {console.log(error)})
+        if (window.confirm("apakah anda yakin akan menghapus paket ini?")) {
+            // let endpoint = `${baseUrl}/paket/` + id_paket
+            // axios.delete(endpoint, authorization)
+            // .then(response => {
+            //     window.alert(response.data.message)
+            //     this.getData()
+            // })
+            // .catch(error => {console.log(error)})
+
+            // mencari posisi index dari data yang akan dihapus
+            let temp = this.state.detail_transaksi
+            let index = temp.findIndex(detail => detail.id_paket === id_paket)
+
+            // menghapus data pada array
+            temp.splice(index, 1)
+            this.setState({details: temp})
         }
     }
 
@@ -176,7 +183,10 @@ export default class FormTransaksi extends React.Component {
                         </button>
 
                         {/** Tampilkan isi detail */}
-                        <h5>Detail Transaksi</h5>
+                        <h5 className="text-warning">
+                            Detail Transaksi
+                        </h5>
+
                         {this.state.detail_transaksi.map(detail => (
                             <div className="row">
                                 {/** area Nama Paket */}
@@ -189,14 +199,14 @@ export default class FormTransaksi extends React.Component {
                                 </div>
                                 {/** area Harga Paket */}
                                 <div className="col-lg-3">
-                                    @ Rp {detail.harga}
+                                    @ Rp {formatNumber(detail.harga)}
                                 </div>
                                 {/** area Harga Total */}
                                 <div className="col-lg-4">
-                                    Total Harga : Rp {detail.harga * detail.qty}
+                                    Total Harga : Rp {formatNumber(detail.harga * detail.qty)}
                                 </div>
                                 <div className="col-lg-3">
-                                    <button className='btn btn-sm btn-outline-danger mx-1'
+                                    <button className='btn btn-sm btn-danger mx-1'
                                         onClick={() => this.hapusPaket(detail.id_paket)}>
                                         Hapus
                                     </button>
@@ -225,8 +235,8 @@ export default class FormTransaksi extends React.Component {
                                             <select className="form-control mb-2"
                                                 value={this.state.id_paket}
                                                 onChange={e => this.setState({ id_paket: e.target.value })}>
-                                                <option value="">Pilih Paket</option>
-                                                {this.state.pakets.map(paket => (
+                                                    <option value="">Pilih Paket</option>
+                                                {this.state.pakets.map(paket => ( 
                                                     <option value={paket.id_paket}>
                                                         {paket.jenis_paket}
                                                     </option>
