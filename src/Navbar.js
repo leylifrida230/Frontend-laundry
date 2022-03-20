@@ -1,8 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "./NavBar.css";
+import "./Navbar.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faJugDetergent } from "@fortawesome/free-solid-svg-icons"
 
-function Logout(){
+function Logout() {
   // remove data token dan user dari local storage
   localStorage.removeItem("user")
   localStorage.removeItem("token")
@@ -10,17 +12,18 @@ function Logout(){
 
 export default function Navbar(props) {
   return (
+
     <div>
       <nav className="navbar navbar-expand-lg 
-      navbar-dark bg-dark">
+      navbar-light">
         <div className="container-fluid">
           {/** Brand */}
-          <a className="navbar-brand">
-            Nini Laundry
-          </a>
+          <h4 className="navbar-brand">
+            Nini Laundry <FontAwesomeIcon icon={faJugDetergent} />
+          </h4>
 
           {/** Button toggler */}
-          <button className="navbar-toggler"
+          <button className="navbar-toggler "
             data-bs-toggle="collapse"
             data-bs-target="#myNav">
             <span className="navbar-toggler-icon"></span>
@@ -34,7 +37,7 @@ export default function Navbar(props) {
 
               <li className="nav-item">
                 <Link to='/' className="nav-link">
-                  Dashhboard
+                   Dashhboard
                 </Link>
               </li>
 
@@ -70,7 +73,7 @@ export default function Navbar(props) {
 
               <li className="nav-item">
                 <Link to='/Login' className="nav-link"
-                onClick={() => Logout()}>
+                  onClick={() => Logout()}>
                   Logout
                 </Link>
               </li>
@@ -80,6 +83,5 @@ export default function Navbar(props) {
       </nav>
       {props.children}
     </div>
-
   )
 }

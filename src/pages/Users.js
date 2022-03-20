@@ -8,21 +8,20 @@ class Users extends React.Component {
         super()
         this.state = {
             User: [
-                {
-                    id_user: "01", nama: "heesung", username: "hee-en",
-                    password: "1234", role: "Admin"
-                },
+                // {
+                //     id_user: "01", nama: "heesung", username: "hee-en",
+                //     password: "1234", role: "Admin"
+                // },
 
-                {
-                    id_user: "02", nama: "leyli", username: "leyy",
-                    password: "4321", role: "Admin"
-                },
+                // {
+                //     id_user: "02", nama: "leyli", username: "leyy",
+                //     password: "4321", role: "Admin"
+                // },
 
-                {
-                    id_user: "03", nama: "fell", username: "feel",
-                    password: "7894", role: "Admin"
-                },
-
+                // {
+                //     id_user: "03", nama: "fell", username: "feel",
+                //     password: "7894", role: "Admin"
+                // },
             ],
 
             id_user: "",
@@ -31,7 +30,8 @@ class Users extends React.Component {
             password: "",
             role: "",
             action: "",
-            visible: true
+            visible: true,
+            FillPassword: true,
         }
     }
 
@@ -45,8 +45,9 @@ class Users extends React.Component {
             nama: "",
             username: "",
             password: "",
-            role: "",
-            action: "tambah"
+            role: "Admin",
+            action: "tambah",
+            FillPassword: true
         })
     }
 
@@ -91,6 +92,10 @@ class Users extends React.Component {
                 role: this.state.role
             }
 
+            if (this.state.FillPassword === true)(
+                newUser = this.state.password
+            )
+
             axios.put(endpoint, newUser, authorization)
                 .then(response => {
                     window.alert(response.data.message)
@@ -129,7 +134,8 @@ class Users extends React.Component {
             nama: this.state.User[index].nama,
             username: this.state.User[index].username,
             password: this.state.password,
-            role: this.state.User[index].role
+            role: this.state.User[index].role,
+            FillPassword: false,
         })
     }
 
@@ -168,29 +174,58 @@ class Users extends React.Component {
         // fungsi ini di jalankan setelah fungsi render berjalan
         this.getData()
         let user = JSON.parse(localStorage.getItem("users"))
-        //Cara Pertama
-        this.setState({
-            role: user.role
-        })
 
-        // Cara kedua
-        if (user.role === 'admin') {
-            this.setState({
-                visible: true
-            })
-        } else (
-            this.setState({
-                visible: false
-            })
-        )
+        if (user.role !== 'Admin') {
+            window.alert(`Maaf anda tidak memiliki akses menuju halaman ini`)
+
+            window.location.href = '/'
+            
+        } 
+        // //Cara Pertama
+        // this.setState({
+        //     role: user.role
+        // })
+
+        // // Cara kedua
+        // if (user.role === 'Admin') {
+        //     this.setState({
+        //         visible: true
+        //     })
+        // } else (
+        //     this.setState({
+        //         visible: false
+        //     })
+        // )
     }
 
-    showAddButton() {
-        if (this.state.role === 'admin') {
-            return (
-                <button type='button' class='btn btn-outline-dark'
-                    onClick={() => this.tambahData()}>
-                    Tambah
+    // showAddButton() {
+    //     if (this.state.role === 'Admin') {
+    //         return (
+    //             <button type='button' class='btn btn-info mb-1'
+    //                 onClick={() => this.tambahUser()}>
+    //                 Tambah
+    //             </button>
+    //         )
+    //     }
+    // }
+
+
+    showPassword(){
+        if(this.state.FillPassword === true){
+            return(
+                <div>
+                    password
+                    <input type="password" className="form-control mb-1"
+                    required
+                    value={this.state.password}
+                    onChange={ev => this.setState({password: ev.target.value})}/>
+                </div>
+            )
+        } else {
+            return(
+                <button className="mb-1 btn btn-success"
+                onClick={() => this.setState({FillPassword: true})}>
+                    Change password
                 </button>
             )
         }
@@ -201,7 +236,7 @@ class Users extends React.Component {
         return (
             <div className="container">
                 <div className="card">
-                    <div className="card-header bg-primary">
+                    <div className="card-header">
                         <h4 className="text-white">
                             List Daftar User
                         </h4>
@@ -209,14 +244,14 @@ class Users extends React.Component {
 
                     <div className="card-body">
 
-                        {/* <button className="col-lg-2 btn-primary"
+                        <button className="btn btn-info mb-1"
                         onClick={() => this.tambahUser()}>
                         Tambah Data
-                    </button> <br/> */}
+                    </button> <br/>
 
-                        <div className="col-lg-3">
+                        {/* <div className="col-lg-3">
                             {this.showAddButton()}
-                        </div>
+                        </div> */}
 
                         <ul className="list-group">
                             {this.state.User.map(userr => (
@@ -262,10 +297,7 @@ class Users extends React.Component {
                                                 onClick={() => this.hapusUser(userr.id_user)}>
                                                 Delete
                                             </button>
-
                                         </div>
-
-
                                     </div>
                                 </li>
                             ))} <br />
@@ -297,12 +329,15 @@ class Users extends React.Component {
                                                 required
                                             />
 
-                                            Password
+                                            {/* Password
                                             <input type="password" className="form-control mb-2"
                                                 value={this.state.password}
                                                 onChange={ev => this.setState({ password: ev.target.value })}
                                                 required
-                                            />
+                                            /> */}
+
+                                            {this.showPassword()}
+                                            <br/>
 
                                             Role
                                             <select className="form-control mb2"

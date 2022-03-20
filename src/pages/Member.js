@@ -180,7 +180,7 @@ class Member extends React.Component {
         })
 
         // Cara kedua
-        if (user.role === 'admin' || user.role === 'kasir') {
+        if (user.role === 'Admin' || user.role === 'Kasir') {
             this.setState({
                 visible: true
             })
@@ -192,9 +192,9 @@ class Member extends React.Component {
     }
 
     showAddButton() {
-        if (this.state.role === 'admin' || this.state.role === 'kasir') {
+        if (this.state.role === 'Admin' || this.state.role === 'Kasir') {
             return (
-                <button type='button' class='btn btn-outline-dark'
+                <button type='button' class='btn btn-outline-dark mb-1'
                     onClick={() => this.tambahData()}>
                     Tambah
                 </button>
@@ -206,7 +206,7 @@ class Member extends React.Component {
         return (
             <div className="container">
                 <div className="card" >
-                    <div className="card-header bg-primary" >
+                    <div className="card-header" >
                         <h4 className="text-white">
                             List Daftar Member
                         </h4>

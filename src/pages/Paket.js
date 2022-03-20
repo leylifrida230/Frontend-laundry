@@ -151,7 +151,7 @@ class Paket extends React.Component {
         })
 
         // Cara kedua
-        if (user.role === 'admin') {
+        if (user.role === 'Admin') {
 
             this.setState({
                 visible: true
@@ -164,10 +164,10 @@ class Paket extends React.Component {
     }
 
     showAddButton() {
-        if (this.state.role === 'admin') {
+        if (this.state.role === 'Admin') {
             return (
                 <button type='button' class='btn btn-outline-dark'
-                    onClick={() => this.tambahData()}>
+                    onClick={() => this.tambahPaket()}>
                     Tambah
                 </button>
             )
@@ -179,7 +179,7 @@ class Paket extends React.Component {
         return (
             <div className="container">
                 <div className="card">
-                    <div className="card-header bg-primary">
+                    <div className="card-header">
                         <h4 className="text-white">
                             List Daftar Paket
                         </h4>

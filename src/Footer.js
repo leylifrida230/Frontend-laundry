@@ -1,13 +1,13 @@
 import React from "react";
-import "./NavBar.css"
+import "./Navbar.css"
 
 function Footer() {
     return (
-        <div className="footer" >
+        <div className="footer">
             <p>
-                ~ Made by love from Leyy ~
+                ~ I just wanna be washing machine no stress no study just brebekbrebek ~
             </p>
-        </div>
+            </div>
     )
 }
 

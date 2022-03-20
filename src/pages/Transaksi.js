@@ -42,7 +42,7 @@ export default class Transaksi extends React.Component {
 
         let user = JSON.parse(localStorage.getItem("users"))
         // Cara kedua
-        if (user.role === 'admin' || user.role === 'kasir') {
+        if (user.role === 'Admin' || user.role === 'Kasir') {
             this.setState({
                 visible: true
             })
@@ -51,6 +51,15 @@ export default class Transaksi extends React.Component {
                 visible: false
             })
         )
+
+        user = JSON.parse(localStorage.getItem("users"))
+
+        if (user.role !== 'Admin' && user.role !== 'Kasir') {
+            window.alert(`Maaf anda tidak memiliki akses menuju halaman ini`)
+
+            window.location.href = '/'
+            
+        } 
     }
 
     HapusTransaksi(id) {
@@ -184,7 +193,7 @@ export default class Transaksi extends React.Component {
         return (
             <div className="container">
                 <div className="card">
-                    <div className="card-header bg-info">
+                    <div className="card-header">
                         <h4 className="text-white">
                             List Transaksi
                         </h4>
@@ -202,7 +211,7 @@ export default class Transaksi extends React.Component {
                         )}
                     </ReactToPdf> */}
 
-                        <button className="btn btn-danger"
+                        <button className= 'btn btn-danger mb-1'
                             onClick={() => this.convertPdf()}>
                             Convert
                         </button>

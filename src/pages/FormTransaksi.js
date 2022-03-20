@@ -43,11 +43,11 @@ export default class FormTransaksi extends React.Component {
 
     componentDidMount() {
         this.getMember()
-        this.getPaket()
+        this.getPaket() 
 
         let user = JSON.parse(localStorage.getItem("users"))
 
-        if (user.role !== 'admin' && user.role !== 'kasir') {
+        if (user.role !== 'Admin' && user.role !== 'Kasir') {
             window.alert(`Maaf anda tidak memiliki akses menuju halaman ini`)
 
             window.location.href = '/'
@@ -136,7 +136,7 @@ export default class FormTransaksi extends React.Component {
         return (
             <div className="container">
                 <div className="card">
-                    <div className="card-header bg-primary">
+                    <div className="card-header">
                         <h4 className="text-white">
                             Form Transaksi
                         </h4>

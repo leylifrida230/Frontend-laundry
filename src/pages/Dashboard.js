@@ -1,6 +1,8 @@
 import React from "react";
 import axios from "axios";
 import { authorization, baseUrl, formatNumber } from "../Config";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faUserGroup, faBoxArchive, faMoneyBill } from "@fortawesome/free-solid-svg-icons"
 
 export default class Dashboard extends React.Component {
     constructor() {
@@ -71,7 +73,7 @@ export default class Dashboard extends React.Component {
                     <div className="col-lg-4 col-md-6">
                         <div className="card text-center bg-success m-1 text-white">
                             <div className="card-body">
-                                <h4 className="card-title">Data Member</h4>
+                                <h4 className="card-title"><FontAwesomeIcon icon={faUserGroup}/></h4>
                                 <h2>{this.state.jmlMember}</h2>
                                 <h6>Member yang telah bergabung di laundry ini</h6>
                             </div>
@@ -81,9 +83,9 @@ export default class Dashboard extends React.Component {
                     <div className="col-lg-4 col-md-6">
                         <div className="card text-center bg-info m-1 text-white">
                             <div className="card-body">
-                                <h4 className="card-title">Data Paket</h4>
+                                <h4 className="card-title"><FontAwesomeIcon icon={faBoxArchive}/></h4>
                                 <h2>{this.state.jmlPaket}</h2>
-                                <h6>Paket Yang Kami Layani dalam laundry ini</h6>
+                                <h6>Paket yang telah kami layani di laundry ini</h6>
                             </div>
                         </div>
                     </div>
@@ -91,18 +93,18 @@ export default class Dashboard extends React.Component {
                     <div className="col-lg-4 col-md-6">
                         <div className="card text-center bg-dark m-1 text-white">
                             <div className="card-body">
-                                <h4 className="card-title">Data Transaksi</h4>
+                                <h4 className="card-title"><FontAwesomeIcon icon={faMoneyBill}/></h4>
                                 <h2>{this.state.jmlTransaksi}</h2>
                                 <h6>Transaksi yang telah kami layani</h6>
                             </div>
                         </div>
                     </div>
 
-                    <div className="col-lg-6">
+                    <div className="col-lg-12">
                         <div className="card bg-secondary m-1">
                             <div className="card-body">
-                                <h4 className="card-title">Income</h4>
-                                <h2>Rp {formatNumber(this.state.income)}</h2>
+                                <h4 className="card-title text-center">Income</h4>
+                                <h2 className="text-center">Rp {formatNumber(this.state.income)}</h2>
                             </div>
                         </div>
                     </div>

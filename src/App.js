@@ -22,10 +22,9 @@ export default function App() {
         <Route path='/Paket' element={<Navbar><Paket /></Navbar>} />
         <Route path='/Transaksi' element={<Navbar><Transaksi /></Navbar>} />
         <Route path='/FormTransaksi' element={<Navbar><FormTransaksi /></Navbar>} />
-
-        <Route component={NotFound} />
+        
+        {/* <Route component={NotFound} /> */}
       </Routes>
-      <br/>
       <Footer />
     </BrowserRouter>
 
