@@ -7,7 +7,13 @@ function Footer() {
             <p>
                 ~ I just wanna be washing machine no stress no study just brebekbrebek ~
             </p>
-            </div>
+            <p>
+                © Made with love
+                <a className="text-black" href='https://pbs.twimg.com/media/FOJkXHxacAEL-rt?format=jpg&name=small'>
+                    , ayang
+                </a>
+            </p>
+        </div>
     )
 }
 

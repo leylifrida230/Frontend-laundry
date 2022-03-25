@@ -166,9 +166,9 @@ class Paket extends React.Component {
     showAddButton() {
         if (this.state.role === 'Admin') {
             return (
-                <button type='button' class='btn btn-outline-dark'
+                <button type='button' class='btn btn-info mb-1'
                     onClick={() => this.tambahPaket()}>
-                    Tambah
+                    Tambah Paket
                 </button>
             )
         }

@@ -177,13 +177,13 @@ export default class FormTransaksi extends React.Component {
                             <option value={false}>Belum Dibayar</option>
                         </select>
 
-                        <button className="btn btn-success"
+                        <button className="btn btn-info"
                             onClick={() => this.addPaket()}>
                             Tambah Paket
                         </button>
 
                         {/** Tampilkan isi detail */}
-                        <h5 className="text-warning">
+                        <h5>
                             Detail Transaksi
                         </h5>
 
@@ -214,7 +214,7 @@ export default class FormTransaksi extends React.Component {
                             </div>
                         ))}
 
-                        <button className="btn btn-outline-info"
+                        <button className="btn btn-outline-success"
                         onClick={() => this.SimpanTransaksi()}>
                             Simpan Transaksi
                         </button>

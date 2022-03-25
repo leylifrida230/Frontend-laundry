@@ -18,7 +18,7 @@
 /* untuk animasi di bawah item navbar */
 .nav-item:hover:after {
   width: 100%;
-  background: #999999;
+  background: #c07960;
 }
 
 .nav-item {

@@ -73,7 +73,7 @@ export default class Dashboard extends React.Component {
                     <div className="col-lg-4 col-md-6">
                         <div className="card text-center bg-success m-1 text-white">
                             <div className="card-body">
-                                <h4 className="card-title"><FontAwesomeIcon icon={faUserGroup}/></h4>
+                                <h4 className="card-title"><FontAwesomeIcon icon={faUserGroup}/> Member</h4>
                                 <h2>{this.state.jmlMember}</h2>
                                 <h6>Member yang telah bergabung di laundry ini</h6>
                             </div>
@@ -83,7 +83,7 @@ export default class Dashboard extends React.Component {
                     <div className="col-lg-4 col-md-6">
                         <div className="card text-center bg-info m-1 text-white">
                             <div className="card-body">
-                                <h4 className="card-title"><FontAwesomeIcon icon={faBoxArchive}/></h4>
+                                <h4 className="card-title"><FontAwesomeIcon icon={faBoxArchive}/> Paket</h4>
                                 <h2>{this.state.jmlPaket}</h2>
                                 <h6>Paket yang telah kami layani di laundry ini</h6>
                             </div>
@@ -93,7 +93,7 @@ export default class Dashboard extends React.Component {
                     <div className="col-lg-4 col-md-6">
                         <div className="card text-center bg-dark m-1 text-white">
                             <div className="card-body">
-                                <h4 className="card-title"><FontAwesomeIcon icon={faMoneyBill}/></h4>
+                                <h4 className="card-title"><FontAwesomeIcon icon={faMoneyBill}/> Transaksi</h4>
                                 <h2>{this.state.jmlTransaksi}</h2>
                                 <h6>Transaksi yang telah kami layani</h6>
                             </div>

@@ -183,6 +183,16 @@ export default class Transaksi extends React.Component {
         })
     }
 
+    printStruk(id){
+        var element = document.getElementById(`struk${id}`);
+        var options = {
+            filename: `struk-${id}.pdf`
+        };
+        domToPdf(element, options, function (pdf) {
+            window.alert(`Struk Will Download Soon`)
+        })
+    }
+
     render() {
         const target = React.createRef()
         const optionPdf = {
@@ -270,6 +280,78 @@ export default class Transaksi extends React.Component {
                                                 {this.convertStatusBayar(trans.id_transaksi, trans.dibayar)}
                                             </div>
 
+                                            {/* this is struk area */}
+                                            <div className="col-lg-3">
+                                                <small className="text-info">
+                                                    Struk 
+                                                </small> <br/>
+                                                <button className="btn btn-sm btn-danger"
+                                                onClick={() => this.printStruk(trans.id_transaksi)}>
+                                                    Struk PDF
+                                                </button>
+                                            </div>
+
+                                            <div style={{display: `none`}}>
+                                                <div className="col-lg-12 p-3" 
+                                                id={`struk${trans.id_transaksi}`}>
+                                                    <h3 className="text-center">
+                                                       ~ Nini Laundry ~
+                                                    </h3>
+
+                                                    <h5 className="text-center">
+                                                        Siap Melayani Cucian Anda
+                                                        <br/>
+                                                        Jalan Menuju Rumahmu No. 23 Harapan Gangnam
+                                                        <br/>
+                                                        Telp. 0823-1234-5678 | IG: @nini_Laundry
+                                                    </h5>
+
+                                                    <h4>Member : {trans.member.nama}</h4>
+                                                    <h4>Tanggal : {trans.tgl} </h4><br/>
+
+                                                    <div className="row mt-3"
+                                                    style={{borderBottom : `1px dotted black`}}>
+                                                        <div className="col-lg-4">
+                                                            <h5>Paket</h5>
+                                                        </div>
+                                                        <div className="col-lg-2">
+                                                            <h5>Qty</h5>
+                                                        </div>
+                                                        <div className="col-lg-3">
+                                                            <h5>Harga Satuan</h5>
+                                                        </div>
+                                                        <div className="col-lg-3">
+                                                            <h5>Total</h5>
+                                                        </div>
+                                                    </div>
+
+                                                    {trans.detail_transaksi.map(item => (
+                                                        <div className="row mt-3"
+                                                        style={{borderBottom : `1px dotted black`}}>
+                                                            <div className="col-lg-4">
+                                                                <h5>{item.paket.jenis_paket}</h5>
+                                                            </div>
+                                                            <div className="col-lg-2">
+                                                                <h5>{item.qty}</h5>
+                                                            </div>
+                                                            <div className="col-lg-3">
+                                                                <h5>Rp. {formatNumber(item.paket.harga)}</h5> 
+                                                            </div>
+                                                            <div className="col-lg-3">
+                                                                <h5>Rp. {formatNumber(item.paket.harga * item.qty)}</h5>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+
+                                                    <div className="row mt-2">
+                                                        <div className="col-lg-9"></div>
+                                                        <div className="col-lg-3">
+                                                            <h4>Rp {formatNumber(trans.total)}</h4>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                             {/* this is total area */}
                                             <div className="col-lg-3">
                                                 <small className="text-info">
@@ -284,9 +366,9 @@ export default class Transaksi extends React.Component {
                                                     Option
                                                 </small><br />
                                                 {/* <button className='btn btn-sm btn-danger'
-                                            onClick={() => this.HapusTransaksi(trans.id_transaksi)}>
-                                            Hapus
-                                        </button> */}
+                                                onClick={() => this.HapusTransaksi(trans.id_transaksi)}>
+                                                    Hapus
+                                                </button> */}
                                                 <button className={`btn btn-sm btn-danger ${this.state.visible ? `` : `d-none`}`}
                                                     onClick={() => this.HapusTransaksi(trans.id_transaksi)}>
                                                     Delete

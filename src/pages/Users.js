@@ -246,7 +246,7 @@ class Users extends React.Component {
 
                         <button className="btn btn-info mb-1"
                         onClick={() => this.tambahUser()}>
-                        Tambah Data
+                        Tambah User
                     </button> <br/>
 
                         {/* <div className="col-lg-3">

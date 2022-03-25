@@ -194,9 +194,9 @@ class Member extends React.Component {
     showAddButton() {
         if (this.state.role === 'Admin' || this.state.role === 'Kasir') {
             return (
-                <button type='button' class='btn btn-outline-dark mb-1'
+                <button type='button' class='btn btn-info mb-1'
                     onClick={() => this.tambahData()}>
-                    Tambah
+                    Tambah Member
                 </button>
             )
         }
